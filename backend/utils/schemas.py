@@ -177,3 +177,44 @@ class QuestionPaperAnalysis(BaseModel):
     bloom_distribution: dict
     difficulty_distribution: dict
     total_marks: int
+
+
+# ========== College Schemas ==========
+
+class CollegeCreate(BaseModel):
+    """College creation request"""
+    name: str
+    code: str
+    address: Optional[str] = None
+
+
+class CollegeResponse(BaseModel):
+    """College response"""
+    id: str
+    name: str
+    code: str
+    address: Optional[str]
+    created_at: Optional[datetime]
+
+    class Config:
+        from_attributes = True
+
+
+class OBECalculateRequest(BaseModel):
+    subject: str
+    college_id: Optional[str] = None
+    threshold: Optional[float] = 60.0
+
+
+class OBECOAttainment(BaseModel):
+    attainment_percent: float
+    level: int
+    total_students: int
+    students_above_threshold: int
+
+
+class OBECalculateResponse(BaseModel):
+    co_attainments: Dict[str, OBECOAttainment]
+
+    class Config:
+        from_attributes = True

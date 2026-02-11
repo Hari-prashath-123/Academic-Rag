@@ -35,6 +35,10 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
     OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-4-turbo-preview")
     EMBEDDING_MODEL: str = os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
+    # Perplexity (used for generation)
+    PERPLEXITY_API_KEY: str = os.getenv("PERPLEXITY_API_KEY", "")
+    PERPLEXITY_MODEL: str = os.getenv("PERPLEXITY_MODEL", "sonar")
+    PERPLEXITY_BASE_URL: str = os.getenv("PERPLEXITY_BASE_URL", "https://api.perplexity.ai")
     
     # Mistral (Alternative)
     MISTRAL_API_KEY: str = os.getenv("MISTRAL_API_KEY", "")
@@ -46,7 +50,7 @@ class Settings(BaseSettings):
     
     # File Upload
     MAX_UPLOAD_SIZE: int = int(os.getenv("MAX_UPLOAD_SIZE", "10485760"))  # 10MB
-    ALLOWED_EXTENSIONS: List[str] = os.getenv("ALLOWED_EXTENSIONS", "pdf,docx,xlsx,pptx").split(",")
+    ALLOWED_EXTENSIONS_RAW: str = os.getenv("ALLOWED_EXTENSIONS", "pdf,docx,xlsx,pptx")
     UPLOAD_FOLDER: str = os.getenv("UPLOAD_FOLDER", "./uploads")
     
     # RAG Configuration
@@ -69,6 +73,10 @@ class Settings(BaseSettings):
     class Config:
         case_sensitive = True
         env_file = ".env"
+
+    @property
+    def ALLOWED_EXTENSIONS(self) -> List[str]:
+        return [s.strip() for s in self.ALLOWED_EXTENSIONS_RAW.split(",") if s.strip()]
 
 # Create settings instance
 settings = Settings()

@@ -44,7 +44,8 @@ async def query_documents(
             user_query=query_data.user_query,
             subject=query_data.subject,
             document_type=query_data.document_type,
-            session_id=session_id
+            session_id=session_id,
+            current_college_id=current_user.college_id
         )
     except Exception as e:
         raise HTTPException(
@@ -121,7 +122,7 @@ async def get_query_history(
 
 @router.get("/history/{query_id}")
 async def get_query_by_id(
-    query_id: int,
+    query_id: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user)
 ):
@@ -140,7 +141,7 @@ async def get_query_by_id(
 
 @router.delete("/history/{query_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_query(
-    query_id: int,
+    query_id: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user)
 ):
@@ -239,6 +240,6 @@ async def get_rag_stats(
     
     return {
         "vector_store": stats,
-        "model": settings.OPENAI_MODEL,
+        "model": settings.PERPLEXITY_MODEL,
         "embedding_model": settings.EMBEDDING_MODEL
     }

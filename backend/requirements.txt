@@ -40,7 +40,7 @@ pydantic==2.5.2
 pydantic-settings==2.1.0
 
 # CORS
-fastapi-cors==0.0.6
+# Use CORSMiddleware via FastAPI instead of fastapi-cors package
 
 # File handling
 aiofiles==23.2.1
@@ -55,4 +55,4 @@ python-dateutil==2.8.2
 environs==10.0.0
 
 # Async support
-asyncio==3.4.3
+# asyncio is part of the standard library; do not list it as a dependency

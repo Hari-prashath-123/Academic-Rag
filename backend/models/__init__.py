@@ -34,3 +34,7 @@ def init_db():
     Initialize database tables
     """
     Base.metadata.create_all(bind=engine)
+
+# Import models to ensure they are registered with Base
+from .college import College  # noqa: E402, F401
+from .question_analysis import QuestionAnalysis  # noqa: E402, F401

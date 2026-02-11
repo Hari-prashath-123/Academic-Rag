@@ -6,6 +6,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from sqlalchemy.orm import Session
 from models.document import Document
+from models.question_analysis import QuestionAnalysis
 from services.document_loader import DocumentLoader
 from config import settings
 import json
@@ -17,50 +18,22 @@ class QuestionPaperAnalyzer:
     
     def __init__(self):
         """Initialize question paper analyzer"""
+        # Initialize LLM using Perplexity sonar via ChatOpenAI wrapper
         self.llm = ChatOpenAI(
-            openai_api_key=settings.OPENAI_API_KEY,
-            model_name=settings.OPENAI_MODEL,
-            temperature=0.3  # Lower temperature for more consistent analysis
+            openai_api_key=settings.PERPLEXITY_API_KEY,
+            openai_api_base=settings.PERPLEXITY_BASE_URL,
+            model_name=settings.PERPLEXITY_MODEL,
+            temperature=0.2
         )
-        
+
+        # Simplified prompt instructing sonar to extract questions and map to Bloom L1-L6 and CO
         self.extraction_prompt = PromptTemplate(
-            template="""You are an expert at analyzing academic question papers. 
-Extract all questions from the following question paper text and analyze each question.
-
-Question Paper Text:
-{text}
-
-For each question, extract:
-1. Question number (e.g., "1", "1a", "2b", "Q3")
-2. Question text (the actual question)
-3. Marks allocated (e.g., 5, 10, 15)
-4. Course Outcome(s) mapped (e.g., CO1, CO2, CO3) - infer if not explicitly stated
-5. Bloom's Taxonomy Level (Remember, Understand, Apply, Analyze, Evaluate, Create)
-6. Unit/Module (if mentioned)
-7. Difficulty level (Easy, Medium, Hard) - based on Bloom's level and complexity
-
-Return the analysis as a JSON array with this structure:
-[
-  {{
-    "question_number": "1",
-    "question_text": "Question text here",
-    "marks": 10,
-    "co_mapping": ["CO1", "CO2"],
-    "bloom_level": "Apply",
-    "unit": "Unit 1",
-    "difficulty": "Medium"
-  }},
-  ...
-]
-
-Important:
-- Extract ALL questions, including sub-questions
-- Infer Bloom's level from keywords (define=Remember, explain=Understand, calculate=Apply, analyze=Analyze, etc.)
-- Estimate difficulty based on Bloom's level and question complexity
-- If CO mapping is not explicitly stated, leave as empty array
-- Be precise with marks allocation
-
-Return ONLY the JSON array, nothing else.""",
+            template=(
+                "Analyze this text. Extract every question and map it to a Bloom's Taxonomy Level (L1-L6) "
+                "and a Course Outcome (CO). Return the result as a JSON array where each item includes: "
+                "question_number, question_text, marks, co_mapping (array), bloom_level (L1-L6), unit, difficulty. "
+                "Return ONLY valid JSON (no extra commentary).\n\nText:\n{text}"
+            ),
             input_variables=["text"]
         )
     
@@ -117,6 +90,27 @@ Return ONLY the JSON array, nothing else.""",
         except Exception as e:
             raise Exception(f"Error analyzing question paper: {str(e)}")
         
+        # Persist parsed questions into QuestionAnalysis table
+        try:
+            # Remove any pre-existing analyses for this document
+            db.query(QuestionAnalysis).filter(QuestionAnalysis.document_id == document_id).delete()
+            for q in questions:
+                qa = QuestionAnalysis(
+                    document_id=document_id,
+                    question_number=q.get("question_number"),
+                    question_text=q.get("question_text"),
+                    marks=q.get("marks"),
+                    co_mapping=q.get("co_mapping"),
+                    bloom_level=q.get("bloom_level"),
+                    unit=q.get("unit"),
+                    difficulty=q.get("difficulty")
+                )
+                db.add(qa)
+            db.commit()
+        except Exception as e:
+            # If DB persistence fails, log but continue
+            print(f"Error saving question analysis: {e}")
+
         # Calculate distributions
         analysis = self._calculate_distributions(questions)
         

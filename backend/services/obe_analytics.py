@@ -1,4 +1,178 @@
 """
+OBE Analytics service
+Provides functions to calculate CO attainment per subject and college
+"""
+from typing import Dict, Any, List
+from statistics import mean
+from models import SessionLocal
+from models.mark import Mark
+from models.user import User
+
+
+def _extract_cos(co_mapping) -> list:
+    """Normalize co_mapping JSON into a list of CO identifiers"""
+    if not co_mapping:
+        return []
+    if isinstance(co_mapping, list):
+        return co_mapping
+    if isinstance(co_mapping, dict):
+        # If mapping like {"Q1": ["CO1"]} -> collect values
+        cos = []
+        for v in co_mapping.values():
+            if isinstance(v, list):
+                cos.extend(v)
+            else:
+                cos.append(v)
+        return cos
+    # fallback: treat as single value
+    return [co_mapping]
+
+
+def calculate_co_attainment(subject_id: str, college_id: str, threshold: float = 60.0) -> Dict[str, Any]:
+    """
+    Calculate CO attainment for a subject within a college.
+
+    Returns a dict mapping CO -> {
+        "attainment_percent": float,
+        "level": int (1..3),
+        "total_students": int,
+        "students_above_threshold": int
+    }
+    """
+    db = SessionLocal()
+    try:
+        # Query marks for subject and students belonging to the college
+        marks = (
+            db.query(Mark)
+            .join(User, Mark.student_id == User.id)
+            .filter(Mark.subject == subject_id, User.college_id == college_id)
+            .all()
+        )
+
+        # Organize scores per CO per student
+        co_student_scores = {}  # co -> {student_id: [percentages]}
+
+        for m in marks:
+            try:
+                pct = (m.marks_obtained / m.max_marks * 100) if m.max_marks and m.max_marks > 0 else 0.0
+            except Exception:
+                pct = 0.0
+
+            cos = _extract_cos(m.co_mapping)
+            for co in cos:
+                if not co:
+                    continue
+                if co not in co_student_scores:
+                    co_student_scores[co] = {}
+                student_scores = co_student_scores[co].setdefault(m.student_id, [])
+                student_scores.append(pct)
+
+        # Compute attainment per CO
+        results = {}
+        for co, student_scores_map in co_student_scores.items():
+            student_avgs = []
+            for student_id, scores in student_scores_map.items():
+                # average percentage for this student on this CO
+                if scores:
+                    student_avgs.append(mean(scores))
+
+            total_students = len(student_avgs)
+            if total_students == 0:
+                attainment_percent = 0.0
+                students_above = 0
+            else:
+                students_above = sum(1 for a in student_avgs if a >= threshold)
+                attainment_percent = (students_above / total_students) * 100.0
+
+            # Map attainment percent to Level (simple standard mapping)
+            # Level 3: attainment >= 80
+            # Level 2: 60 <= attainment < 80
+            # Level 1: attainment < 60
+            if attainment_percent >= 80.0:
+                level = 3
+            elif attainment_percent >= 60.0:
+                level = 2
+            else:
+                level = 1
+
+            results[co] = {
+                "attainment_percent": round(attainment_percent, 2),
+                "level": level,
+                "total_students": total_students,
+                "students_above_threshold": students_above
+            }
+
+        return results
+    finally:
+        db.close()
+
+
+class OBEAnalytics:
+    """Compatibility class for existing routes expecting OBEAnalytics."""
+
+    def _calculate_from_marks(self, marks: List[Mark], threshold: float = 60.0) -> Dict[str, Any]:
+        co_student_scores = {}
+
+        for m in marks:
+            try:
+                pct = (m.marks_obtained / m.max_marks * 100) if m.max_marks and m.max_marks > 0 else 0.0
+            except Exception:
+                pct = 0.0
+
+            cos = _extract_cos(m.co_mapping)
+            for co in cos:
+                if not co:
+                    continue
+                if co not in co_student_scores:
+                    co_student_scores[co] = {}
+                student_scores = co_student_scores[co].setdefault(m.student_id, [])
+                student_scores.append(pct)
+
+        results = {}
+        for co, student_scores_map in co_student_scores.items():
+            student_avgs = []
+            for student_id, scores in student_scores_map.items():
+                if scores:
+                    student_avgs.append(mean(scores))
+
+            total_students = len(student_avgs)
+            if total_students == 0:
+                attainment_percent = 0.0
+                students_above = 0
+            else:
+                students_above = sum(1 for a in student_avgs if a >= threshold)
+                attainment_percent = (students_above / total_students) * 100.0
+
+            if attainment_percent >= 80.0:
+                level = 3
+            elif attainment_percent >= 60.0:
+                level = 2
+            else:
+                level = 1
+
+            results[co] = {
+                "attainment_percent": round(attainment_percent, 2),
+                "level": level,
+                "total_students": total_students,
+                "students_above_threshold": students_above
+            }
+
+        return results
+
+    def calculate_co_attainment(self, db, subject: str, semester: str = None, academic_year: str = None, threshold: float = 60.0):
+        """Calculate CO attainment using an existing DB session and optional filters."""
+        query = db.query(Mark)
+        if subject:
+            query = query.filter(Mark.subject == subject)
+        if semester:
+            query = query.filter(Mark.semester == semester)
+        if academic_year:
+            query = query.filter(Mark.academic_year == academic_year)
+
+        marks = query.all()
+        return self._calculate_from_marks(marks, threshold=threshold)
+
+"""
 OBE (Outcome-Based Education) analytics service
 """
 from typing import Dict, List, Any, Optional

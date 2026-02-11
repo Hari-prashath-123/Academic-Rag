@@ -64,7 +64,8 @@ class EmbeddingService:
         self,
         document_id: int,
         pages: List[Dict[str, Any]],
-        metadata: Dict[str, Any]
+        metadata: Dict[str, Any],
+        college_id: str = None
     ) -> int:
         """
         Index a document by chunking text and generating embeddings
@@ -97,7 +98,8 @@ class EmbeddingService:
                     **page_metadata,
                     "document_id": document_id,
                     "page_no": page.get("page_no", 1),
-                    "chunk_id": f"{document_id}_p{page.get('page_no', 1)}_c{i}"
+                    "chunk_id": f"{document_id}_p{page.get('page_no', 1)}_c{i}",
+                    "college_id": college_id if college_id is not None else metadata.get("college_id")
                 }
                 
                 doc = LangchainDocument(

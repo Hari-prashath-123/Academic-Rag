@@ -14,10 +14,14 @@ from utils.schemas import (
     COAttainmentRequest,
     COAttainmentResponse,
     BloomMappingResponse,
-    OBEReportRequest
+    OBEReportRequest,
+    OBECalculateRequest,
+    OBECalculateResponse,
+    OBECOAttainment
 )
 from utils.auth import get_current_active_user, is_faculty_or_admin
 from services.obe_analytics import OBEAnalytics
+from services.obe_analytics import calculate_co_attainment
 
 router = APIRouter(prefix="/obe", tags=["OBE Analytics"])
 
@@ -235,6 +239,27 @@ async def get_subjects_with_marks(
     return {
         "subjects": [subject[0] for subject in subjects if subject[0]]
     }
+
+
+@router.post("/calculate", response_model=OBECalculateResponse)
+async def calculate_obes(
+    request: OBECalculateRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
+):
+    """Calculate CO attainment for a subject within a college.
+
+    If `college_id` is not provided in the request, defaults to the current user's college.
+    """
+    college_id = request.college_id or current_user.college_id
+    if not college_id:
+        raise HTTPException(status_code=400, detail="college_id must be provided or user must belong to a college")
+
+    results = calculate_co_attainment(request.subject, college_id, threshold=request.threshold or 60.0)
+
+    co_map = {co: OBECOAttainment(**data) for co, data in results.items()}
+
+    return OBECalculateResponse(co_attainments=co_map)
 
 @router.delete("/marks/{mark_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_mark(

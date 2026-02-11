@@ -67,14 +67,15 @@ def get_current_user(
     
     try:
         payload = decode_access_token(token)
-        user_id: int = payload.get("sub")
-        
+        user_id = payload.get("sub")
+
         if user_id is None:
             raise HTTPException(status_code=401, detail="Invalid authentication credentials")
-        
+
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid authentication credentials")
-    
+
+    # user_id may be stored as int or string (UUID); compare directly
     user = db.query(User).filter(User.id == user_id).first()
     
     if user is None:
@@ -93,10 +94,13 @@ def require_role(allowed_roles: list):
     Decorator to require specific user roles
     """
     def role_checker(current_user: User = Depends(get_current_user)) -> User:
-        if current_user.role not in allowed_roles:
+        # Normalize allowed roles to strings (support enum or raw strings)
+        normalized = [r.value if hasattr(r, "value") else r for r in allowed_roles]
+        user_role = current_user.role.value if hasattr(current_user.role, "value") else current_user.role
+        if user_role not in normalized:
             raise HTTPException(
                 status_code=403,
-                detail=f"Access denied. Required roles: {', '.join([r.value for r in allowed_roles])}"
+                detail=f"Access denied. Required roles: {', '.join([str(r) for r in normalized])}"
             )
         return current_user
     return role_checker
@@ -105,7 +109,9 @@ def is_admin(current_user: User = Depends(get_current_user)) -> User:
     """
     Check if the current user is an admin
     """
-    if current_user.role != UserRole.ADMIN:
+    user_role = current_user.role.value if hasattr(current_user.role, "value") else current_user.role
+    admin_value = UserRole.ADMIN.value if hasattr(UserRole.ADMIN, "value") else UserRole.ADMIN
+    if user_role != admin_value:
         raise HTTPException(status_code=403, detail="Admin access required")
     return current_user
 

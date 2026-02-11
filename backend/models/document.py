@@ -1,7 +1,6 @@
-"""
-Document model for uploaded files and their metadata
-"""
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Enum as SQLEnum, Text, Boolean
+"""Document model for uploaded files and their metadata"""
+from sqlalchemy import Column, String, DateTime, ForeignKey, Enum as SQLEnum, Text, Boolean, text
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import enum
@@ -29,14 +28,14 @@ class Document(Base):
     """Document model"""
     __tablename__ = "documents"
     
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True, server_default=text('gen_random_uuid()'), nullable=False)
     title = Column(String, nullable=False)
     subject = Column(String, index=True)
     document_type = Column(SQLEnum(DocumentType), nullable=False, index=True)
     file_path = Column(String, nullable=False)
     file_url = Column(String)
     file_size = Column(Integer)
-    uploaded_by = Column(Integer, ForeignKey("users.id"), nullable=False)
+    uploaded_by = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     upload_date = Column(DateTime, default=datetime.utcnow, nullable=False)
     indexing_status = Column(SQLEnum(IndexingStatus), default=IndexingStatus.PENDING, nullable=False)
     indexed_at = Column(DateTime)

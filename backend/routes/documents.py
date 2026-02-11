@@ -24,7 +24,7 @@ def allowed_file(filename: str) -> bool:
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in settings.ALLOWED_EXTENSIONS
 
-async def process_document_async(document_id: int, file_path: str, db: Session):
+async def process_document_async(document_id: int, file_path: str, db: Session, college_id: str = None):
     """
     Background task to process and index document
     """
@@ -53,7 +53,8 @@ async def process_document_async(document_id: int, file_path: str, db: Session):
                 "title": document.title,
                 "subject": document.subject,
                 "document_type": document.document_type.value
-            }
+            },
+            college_id=college_id
         )
         
         # Update document status
@@ -139,7 +140,7 @@ async def upload_document(
     db.refresh(new_document)
     
     # Process document in background
-    background_tasks.add_task(process_document_async, new_document.id, file_path, db)
+    background_tasks.add_task(process_document_async, new_document.id, file_path, db, current_user.college_id)
     
     return new_document.to_dict()
 
@@ -252,7 +253,7 @@ async def reindex_document(
     db.commit()
     
     # Process document in background
-    background_tasks.add_task(process_document_async, document.id, document.file_path, db)
+    background_tasks.add_task(process_document_async, document.id, document.file_path, db, current_user.college_id)
     
     return document.to_dict()
 
