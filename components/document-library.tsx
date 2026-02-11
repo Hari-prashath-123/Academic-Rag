@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import {
   Search,
   Upload,
@@ -43,7 +43,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-const documents = [
+// will be loaded from backend
+// const documents = [
+const DEFAULT_DOCS: any[] = []
   {
     id: 1,
     name: 'DS_Syllabus_2024.pdf',
@@ -193,6 +195,27 @@ export function DocumentLibrary() {
   const [uploads, setUploads] = useState<
     Array<{ id: string; filename: string; progress: number; status: 'uploading' | 'indexing' | 'complete' }>
   >([])
+  const [documentsList, setDocumentsList] = useState<any[]>(DEFAULT_DOCS)
+  const [uploadControllers, setUploadControllers] = useState<Record<string, AbortController>>({})
+
+  // api client
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const api = require('../lib/api').default
+
+  useEffect(() => {
+    fetchDocuments()
+  }, [])
+
+  const fetchDocuments = async () => {
+    try {
+      const res = await api.get('/documents/')
+      const docs = res.data?.documents || []
+      setDocumentsList(docs)
+    } catch (e) {
+      console.error('Failed to fetch documents', e)
+    }
+  }
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const getStatusColor = (status: string) => {
@@ -212,54 +235,64 @@ export function DocumentLibrary() {
         progress: 0,
         status: 'uploading' as const,
       }
-
       setUploads((prev) => [...prev, uploadItem])
 
-      // Simulate file upload (0-60%)
-      for (let i = 0; i <= 60; i += 10) {
-        await new Promise((resolve) => setTimeout(resolve, 200))
-        setUploads((prev) =>
-          prev.map((u) =>
-            u.id === uploadId
-              ? { ...u, progress: i + Math.random() * 10 }
-              : u
-          )
-        )
+      // Prepare FormData
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('title', file.name)
+      // subject: use current subject filter if set
+      formData.append('subject', subjectFilter !== 'all' ? subjectFilter : '')
+      // document_type: try to infer from file name or type filter
+      let inferredType = 'other'
+      const lower = file.name.toLowerCase()
+      if (lower.includes('question') || lower.includes('qp')) inferredType = 'question_paper'
+      else if (lower.includes('syllabus')) inferredType = 'syllabus'
+      else if (lower.includes('marks') || lower.includes('mark')) inferredType = 'marksheet'
+      formData.append('document_type', inferredType)
+
+      const controller = new AbortController()
+      setUploadControllers((prev) => ({ ...prev, [uploadItem.id]: controller }))
+
+      try {
+        const res = await api.post('/documents/upload', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+          signal: controller.signal,
+          onUploadProgress: (progressEvent: any) => {
+            const pct = Math.round((progressEvent.loaded * 100) / (progressEvent.total || file.size))
+            setUploads((prev) => prev.map((u) => u.id === uploadItem.id ? { ...u, progress: pct } : u))
+          }
+        })
+
+        // Uploaded, switch to indexing
+        setUploads((prev) => prev.map((u) => u.id === uploadItem.id ? { ...u, status: 'indexing', progress: 65 } : u))
+
+        // Optionally wait or poll for indexing status; here we assume backend will process asynchronously
+        // Mark complete
+        setUploads((prev) => prev.map((u) => u.id === uploadItem.id ? { ...u, status: 'complete', progress: 100 } : u))
+
+        // Refresh documents list
+        await fetchDocuments()
+
+      } catch (err) {
+        console.error('Upload failed', err)
+        // remove upload entry
+        setUploads((prev) => prev.filter((u) => u.id !== uploadItem.id))
+      } finally {
+        // cleanup controller
+        setUploadControllers((prev) => {
+          const copy = { ...prev }
+          delete copy[uploadItem.id]
+          return copy
+        })
       }
-
-      // Transition to indexing
-      setUploads((prev) =>
-        prev.map((u) =>
-          u.id === uploadId
-            ? { ...u, status: 'indexing', progress: 65 }
-            : u
-        )
-      )
-
-      // Simulate indexing (60-100%)
-      for (let i = 65; i <= 100; i += 10) {
-        await new Promise((resolve) => setTimeout(resolve, 300))
-        setUploads((prev) =>
-          prev.map((u) =>
-            u.id === uploadId
-              ? { ...u, progress: i + Math.random() * 10 }
-              : u
-          )
-        )
-      }
-
-      // Mark as complete
-      setUploads((prev) =>
-        prev.map((u) =>
-          u.id === uploadId
-            ? { ...u, status: 'complete', progress: 100 }
-            : u
-        )
-      )
     }
   }
 
   const handleCancelUpload = (uploadId: string) => {
+    // abort if ongoing
+    const controller = uploadControllers[uploadId]
+    if (controller) controller.abort()
     setUploads((prev) => prev.filter((u) => u.id !== uploadId))
   }
 
@@ -275,7 +308,7 @@ export function DocumentLibrary() {
     return colors[type] || 'bg-gray-500/10 text-gray-700 dark:text-gray-400'
   }
 
-  const filteredDocuments = documents.filter((doc) => {
+  const filteredDocuments = documentsList.filter((doc) => {
     const matchesSearch = doc.name
       .toLowerCase()
       .includes(searchTerm.toLowerCase())

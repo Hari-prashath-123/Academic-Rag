@@ -41,7 +41,8 @@ async def register(user_data: UserRegister, db: Session = Depends(get_db)):
         name=user_data.name,
         email=user_data.email,
         password_hash=get_password_hash(user_data.password),
-        role=user_data.role
+        role=user_data.role,
+        college_id=user_data.college_id if hasattr(user_data, 'college_id') else None
     )
     
     db.add(new_user)
@@ -69,8 +70,9 @@ async def login(user_data: UserLogin, db: Session = Depends(get_db)):
     
     # Create access token
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    user_role_value = user.role.value if hasattr(user.role, 'value') else user.role
     access_token = create_access_token(
-        data={"sub": user.id, "email": user.email, "role": user.role.value},
+        data={"sub": user.id, "email": user.email, "role": user_role_value},
         expires_delta=access_token_expires
     )
     

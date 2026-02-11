@@ -2,8 +2,9 @@
 Pydantic schemas for request/response validation
 """
 from pydantic import BaseModel, EmailStr, Field, validator
-from typing import Optional, List
+from typing import Optional, List, Dict
 from datetime import datetime
+from uuid import UUID
 from models.user import UserRole
 from models.document import DocumentType, IndexingStatus
 from models.mark import AssessmentType
@@ -16,6 +17,7 @@ class UserRegister(BaseModel):
     email: EmailStr
     password: str = Field(..., min_length=6, max_length=100)
     role: Optional[UserRole] = UserRole.STUDENT
+    college_id: Optional[UUID] = None
 
 class UserLogin(BaseModel):
     """User login request"""
@@ -33,6 +35,7 @@ class UserResponse(BaseModel):
     name: str
     email: str
     role: str
+    college_id: Optional[UUID]
     created_at: Optional[datetime]
     
     class Config:

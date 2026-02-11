@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import api from '../../../lib/api'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -23,26 +24,29 @@ export default function LoginPage() {
     e.preventDefault()
     setError('')
 
-    if (!role) {
-      setError('Please select your role')
-      return
-    }
-
     if (!email || !password) {
       setError('Please enter your email and password')
       return
     }
 
     setIsLoading(true)
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    // Mock authentication
-    localStorage.setItem('user_role', role)
-    localStorage.setItem('user_email', email)
-
-    setIsLoading(false)
-    router.push('/dashboard')
+    try {
+      const res = await api.post('/auth/login', { email, password })
+      const token = res?.data?.access_token
+      if (token) {
+        localStorage.setItem('token', token)
+        // also set cookie for SSR compatibility if needed
+        document.cookie = `token=${token}; path=/`
+        router.push('/dashboard')
+        return
+      }
+      setError('Invalid login response')
+    } catch (err: any) {
+      const msg = err?.response?.data?.detail || err.message || 'Login failed'
+      setError(String(msg))
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const roleOptions = [

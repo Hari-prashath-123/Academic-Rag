@@ -1,5 +1,5 @@
 """Document model for uploaded files and their metadata"""
-from sqlalchemy import Column, String, DateTime, ForeignKey, Enum as SQLEnum, Text, Boolean, text
+from sqlalchemy import Column, String, DateTime, ForeignKey, Enum as SQLEnum, Text, Boolean, text, Integer
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from datetime import datetime
@@ -40,7 +40,7 @@ class Document(Base):
     indexing_status = Column(SQLEnum(IndexingStatus), default=IndexingStatus.PENDING, nullable=False)
     indexed_at = Column(DateTime)
     chunk_count = Column(Integer, default=0)
-    metadata = Column(Text)  # JSON string for additional metadata
+    meta_json = Column(Text)  # JSON string for additional metadata
     error_message = Column(Text)
     is_deleted = Column(Boolean, default=False)
     
@@ -65,6 +65,6 @@ class Document(Base):
             "indexing_status": self.indexing_status.value,
             "indexed_at": self.indexed_at.isoformat() if self.indexed_at else None,
             "chunk_count": self.chunk_count,
-            "metadata": self.metadata,
+            "metadata": self.meta_json,
             "error_message": self.error_message
         }

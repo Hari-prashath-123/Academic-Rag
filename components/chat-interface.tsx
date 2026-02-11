@@ -68,6 +68,13 @@ export function ChatInterface() {
   const [messages, setMessages] = useState(initialMessages)
   const [isStreaming, setIsStreaming] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const [sessionId, setSessionId] = useState<string | null>(null)
+
+  // API client
+  // relative import to lib
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const api = require('../lib/api').default
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
@@ -79,55 +86,72 @@ export function ChatInterface() {
     }
   }, [messages])
 
-  const simulateStreamingResponse = async (userMessage: string) => {
-    const streamingMessage = {
-      type: 'assistant' as const,
-      content: '',
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      isStreaming: true,
-      sources: [
-        { type: 'Syllabus', name: 'DS_Syllabus_2024.pdf', page: 12 },
-        { type: 'Study Material', name: 'Lecture_Notes.pdf', page: 5 },
-      ],
-    }
-
-    setMessages((prev) => [...prev, streamingMessage])
-    setIsStreaming(true)
-
-    // Simulate streaming response with character-by-character addition
-    const fullResponse =
-      'Based on the uploaded documents and course curriculum, I can provide you with the following insights:\n\n' +
-      'Key findings from your query:\n' +
-      '• Complete coverage information available\n' +
-      '• Course outcome alignment verified\n' +
-      '• Assessment guidelines aligned with Bloom\'s taxonomy\n\n' +
-      'Recommendations:\n' +
-      '- Review the linked syllabus for detailed requirements\n' +
-      '- Cross-reference with the CO mapping document\n' +
-      '- Consider the learning level appropriateness'
-
-    for (let i = 0; i < fullResponse.length; i++) {
-      await new Promise((resolve) => setTimeout(resolve, 15))
-      setMessages((prev) => {
-        const newMessages = [...prev]
-        const lastMsg = newMessages[newMessages.length - 1]
-        if (lastMsg && lastMsg.type === 'assistant') {
-          lastMsg.content += fullResponse[i]
+  // Load chat history on mount
+  useEffect(() => {
+    const loadHistory = async () => {
+      try {
+        const res = await api.get('/rag/history')
+        const queries = res.data?.queries || []
+        const loadedMessages: any[] = []
+        for (const q of queries) {
+          // user message
+          loadedMessages.push({
+            type: 'user',
+            content: q.query,
+            timestamp: q.timestamp ? new Date(q.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''
+          })
+          // assistant message
+          loadedMessages.push({
+            type: 'assistant',
+            content: q.response,
+            timestamp: q.timestamp ? new Date(q.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '',
+            sources: q.sources || []
+          })
         }
-        return newMessages
-      })
-    }
-
-    setMessages((prev) => {
-      const newMessages = [...prev]
-      const lastMsg = newMessages[newMessages.length - 1]
-      if (lastMsg) {
-        lastMsg.isStreaming = false
+        if (loadedMessages.length) setMessages(loadedMessages)
+        // set session id from first query if present
+        if (queries.length && queries[0].session_id) setSessionId(queries[0].session_id)
+      } catch (e) {
+        console.error('Failed to load chat history', e)
       }
-      return newMessages
-    })
+    }
+    loadHistory()
+  }, [])
 
-    setIsStreaming(false)
+  const callRagApi = async (userMessage: string, subject?: string) => {
+    setIsStreaming(true)
+    try {
+      const payload: any = { user_query: userMessage }
+      if (subject) payload.subject = subject
+      if (sessionId) payload.session_id = sessionId
+
+      const res = await api.post('/rag/query', payload)
+      const data = res.data
+
+      // Append assistant response
+      const assistantMessage: any = {
+        type: 'assistant',
+        content: data.answer || '',
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        sources: data.sources || []
+      }
+
+      setMessages((prev) => [...prev, assistantMessage])
+
+      // update session id if returned
+      if (data.session_id) setSessionId(data.session_id)
+
+    } catch (e) {
+      console.error('RAG query failed', e)
+      const errMsg = {
+        type: 'assistant',
+        content: 'Error: failed to get answer from server.',
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      }
+      setMessages((prev) => [...prev, errMsg])
+    } finally {
+      setIsStreaming(false)
+    }
   }
 
   const handleSend = async () => {
@@ -141,10 +165,8 @@ export function ChatInterface() {
       setMessages((prev) => [...prev, userMessage])
       setInput('')
 
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 500))
-
-      await simulateStreamingResponse(input)
+      // Call backend RAG API
+      await callRagApi(input)
     }
   }
 

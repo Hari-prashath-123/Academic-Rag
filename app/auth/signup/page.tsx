@@ -9,6 +9,7 @@ import { Mail, Lock, User, Briefcase, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
+import api from '../../../lib/api'
 
 export default function SignupPage() {
   const router = useRouter()
@@ -19,6 +20,7 @@ export default function SignupPage() {
     password: '',
     confirmPassword: '',
     institutionId: '',
+    collegeId: '',
   })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -69,16 +71,28 @@ export default function SignupPage() {
     }
 
     setIsLoading(true)
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: role,
+        college_id: formData.collegeId || undefined
+      }
 
-    // Mock registration
-    localStorage.setItem('user_role', role)
-    localStorage.setItem('user_email', formData.email)
-    localStorage.setItem('user_name', formData.name)
-
-    setIsLoading(false)
-    router.push('/dashboard')
+      const res = await api.post('/auth/register', payload)
+      if (res && res.status === 201) {
+        // Registration successful -> redirect to login
+        router.push('/auth/login')
+        return
+      }
+      setError('Unexpected registration response')
+    } catch (err: any) {
+      const msg = err?.response?.data?.detail || err.message || 'Registration failed'
+      setError(String(msg))
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const strengthConfig = {
@@ -212,6 +226,23 @@ export default function SignupPage() {
                 </div>
               </div>
             )}
+
+            {/* College ID (optional) */}
+            <div className="space-y-2">
+              <label htmlFor="college-id" className="block text-sm font-medium text-foreground">
+                College ID (optional)
+              </label>
+              <div className="relative">
+                <Input
+                  id="college-id"
+                  type="text"
+                  placeholder="college-uuid-or-code"
+                  value={formData.collegeId}
+                  onChange={(e) => setFormData({ ...formData, collegeId: e.target.value })}
+                  className="pl-3 bg-secondary/50 border-border/50"
+                />
+              </div>
+            </div>
 
             {/* Password */}
             <div className="space-y-2">
