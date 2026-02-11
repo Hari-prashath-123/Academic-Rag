@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    /* Light mode - Clean backgrounds */
+    --background: 250 35% 96%;
+    --foreground: 240 10% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 15%;
+    /* Primary: Deep Indigo */
+    --primary: 240 100% 45%;
+    --primary-foreground: 0 0% 100%;
+    /* Secondary: Soft violet/slate */
+    --secondary: 250 40% 88%;
+    --secondary-foreground: 240 10% 20%;
+    /* Muted: Light grays */
+    --muted: 240 10% 92%;
+    --muted-foreground: 240 5% 45%;
+    /* Accent: Violet */
+    --accent: 280 100% 50%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5% 90%;
+    --input: 0 0% 100%;
+    --ring: 240 100% 50%;
+    /* Chart colors - Indigo/Violet palette */
+    --chart-1: 240 100% 50%;
+    --chart-2: 270 100% 50%;
+    --chart-3: 280 100% 50%;
+    --chart-4: 220 100% 50%;
+    --chart-5: 250 100% 45%;
+    --radius: 0.75rem;
+    /* Sidebar */
+    --sidebar-background: 240 10% 12%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 280 100% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 250 40% 30%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 240 5% 20%;
+    --sidebar-ring: 280 100% 50%;
+  }
+  .dark {
+    /* Dark mode - Premium dark backgrounds */
+    --background: 240 10% 8%;
+    --foreground: 240 5% 95%;
+    --card: 240 10% 12%;
+    --card-foreground: 240 5% 95%;
+    --popover: 240 10% 12%;
+    --popover-foreground: 240 5% 95%;
+    /* Primary: Bright indigo */
+    --primary: 240 100% 55%;
+    --primary-foreground: 240 10% 8%;
+    /* Secondary: Dark slate */
+    --secondary: 240 5% 20%;
+    --secondary-foreground: 240 5% 95%;
+    /* Muted: Dark grays */
+    --muted: 240 5% 25%;
+    --muted-foreground: 240 3% 60%;
+    /* Accent: Vibrant violet */
+    --accent: 280 100% 60%;
+    --accent-foreground: 240 10% 8%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5% 18%;
+    --input: 240 10% 15%;
+    --ring: 280 100% 55%;
+    /* Chart colors */
+    --chart-1: 280 100% 60%;
+    --chart-2: 240 100% 55%;
+    --chart-3: 270 100% 55%;
+    --chart-4: 220 100% 55%;
+    --chart-5: 250 100% 50%;
+    --radius: 0.75rem;
+    /* Sidebar */
+    --sidebar-background: 240 10% 10%;
+    --sidebar-foreground: 240 3% 90%;
+    --sidebar-primary: 280 100% 60%;
+    --sidebar-primary-foreground: 240 10% 8%;
+    --sidebar-accent: 250 40% 35%;
+    --sidebar-accent-foreground: 240 3% 90%;
+    --sidebar-border: 240 5% 15%;
+    --sidebar-ring: 280 100% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
