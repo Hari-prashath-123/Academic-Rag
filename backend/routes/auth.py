@@ -17,6 +17,7 @@ from utils.auth import (
     get_current_user_access,
     get_password_hash,
     get_user_roles_and_permissions,
+    needs_password_rehash,
     verify_password,
 )
 
@@ -210,6 +211,12 @@ async def login(user_data: LoginRequest, db: Session = Depends(get_db)):
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
+    if needs_password_rehash(user.password_hash):
+        user.password_hash = get_password_hash(user_data.password)
+        db.add(user)
+        db.commit()
+        db.refresh(user)
 
     roles, _ = get_user_roles_and_permissions(user)
 

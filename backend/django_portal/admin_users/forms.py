@@ -1,12 +1,12 @@
 from django import forms
-from passlib.context import CryptContext
+from pwdlib import PasswordHash
 
-from .models import PortalUser
+from .models import User
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+password_hash = PasswordHash.recommended()
 
 
-class PortalUserAdminForm(forms.ModelForm):
+class UserAdminForm(forms.ModelForm):
     password = forms.CharField(
         required=False,
         widget=forms.PasswordInput(render_value=False),
@@ -14,7 +14,7 @@ class PortalUserAdminForm(forms.ModelForm):
     )
 
     class Meta:
-        model = PortalUser
+        model = User
         fields = ["email", "password"]
 
     def clean(self):
@@ -33,7 +33,7 @@ class PortalUserAdminForm(forms.ModelForm):
         instance = super().save(commit=False)
         password = self.cleaned_data.get("password")
         if password:
-            instance.password_hash = pwd_context.hash(password)
+            instance.password_hash = password_hash.hash(password)
         if commit:
             instance.save()
         return instance

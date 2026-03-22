@@ -20,6 +20,8 @@ class Settings(BaseSettings):
     DEBUG: bool = os.getenv("DEBUG", "True").lower() == "true"
     PORT: int = int(os.getenv("PORT", "8000"))
     HOST: str = os.getenv("HOST", "0.0.0.0")
+    DJANGO_ADMIN_PORT: int = int(os.getenv("DJANGO_ADMIN_PORT", "8001"))
+    DJANGO_ADMIN_HOST: str = os.getenv("DJANGO_ADMIN_HOST", "127.0.0.1")
     
     # Database
     DB_HOST: str = os.getenv("DB_HOST", "localhost")

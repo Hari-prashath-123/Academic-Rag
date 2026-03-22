@@ -6,28 +6,47 @@ from uuid import UUID
 from fastapi import Depends, HTTPException, Security, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
-from passlib.context import CryptContext
+from pwdlib import PasswordHash
+from pwdlib.exceptions import UnknownHashError
 from sqlalchemy.orm import Session
+
+import bcrypt
 
 from config import settings
 from models import get_db
 from models.user import User
 
 # Password hashing context
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+password_hash = PasswordHash.recommended()
 
 # Security scheme
 security = HTTPBearer()
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify a plain password against a hashed password."""
-    return pwd_context.verify(plain_password, hashed_password)
+    """Verify password against argon2 hashes and legacy bcrypt hashes."""
+    if not hashed_password:
+        return False
+
+    try:
+        return password_hash.verify(plain_password, hashed_password)
+    except UnknownHashError:
+        # Backward compatibility for legacy bcrypt hashes stored before pwdlib migration.
+        if hashed_password.startswith(("$2a$", "$2b$", "$2y$")):
+            return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
+        return False
 
 
 def get_password_hash(password: str) -> str:
     """Hash a password."""
-    return pwd_context.hash(password)
+    return password_hash.hash(password)
+
+
+def needs_password_rehash(hashed_password: str) -> bool:
+    """Return True when the stored hash should be upgraded to current scheme."""
+    if not hashed_password:
+        return False
+    return hashed_password.startswith(("$2a$", "$2b$", "$2y$"))
 
 
 def get_user_roles_and_permissions(user: User) -> tuple[list[str], list[str]]:

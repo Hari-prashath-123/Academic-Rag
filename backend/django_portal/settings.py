@@ -10,6 +10,10 @@ load_dotenv(BASE_DIR / ".env")
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-only-change-this")
 DEBUG = os.getenv("DEBUG", "true").lower() == "true"
 
+# Keep Django admin on a separate default port to avoid clashing with FastAPI.
+DJANGO_ADMIN_HOST = os.getenv("DJANGO_ADMIN_HOST", "127.0.0.1")
+DJANGO_ADMIN_PORT = int(os.getenv("DJANGO_ADMIN_PORT", "8001"))
+
 ALLOWED_HOSTS = [h.strip() for h in os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",") if h.strip()]
 
 INSTALLED_APPS = [

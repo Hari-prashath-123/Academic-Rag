@@ -1,12 +1,20 @@
 from django.contrib import admin
+from django.contrib.auth.admin import GroupAdmin
+from django.contrib.auth.models import Group
 
-from .forms import PortalUserAdminForm
-from .models import PortalUser, Role, RolePermission, UserRole, Profile
+from .forms import UserAdminForm
+from .models import User, Role, RolePermission, UserRole, Profile
+
+# Unregister Django's built-in auth models to keep only our unified User model
+try:
+    admin.site.unregister(Group)
+except admin.sites.NotRegistered:
+    pass
 
 
-@admin.register(PortalUser)
-class PortalUserAdmin(admin.ModelAdmin):
-    form = PortalUserAdminForm
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    form = UserAdminForm
     list_display = ("email", "created_at", "updated_at")
     search_fields = ("email",)
     readonly_fields = ("id", "created_at", "updated_at", "password_hash")

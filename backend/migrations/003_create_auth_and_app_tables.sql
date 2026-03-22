@@ -50,11 +50,13 @@ CREATE INDEX IF NOT EXISTS idx_role_permissions_permission_name ON public.role_p
 -- user_roles (many-to-many between users and roles)
 -- =============================================
 CREATE TABLE IF NOT EXISTS public.user_roles (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id uuid NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
     role_id uuid NOT NULL REFERENCES public.roles(id) ON DELETE CASCADE,
-    PRIMARY KEY (user_id, role_id)
+    UNIQUE(user_id, role_id)
 );
 
+CREATE INDEX IF NOT EXISTS idx_user_roles_user_id ON public.user_roles(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_roles_role_id ON public.user_roles(role_id);
 
 -- =============================================

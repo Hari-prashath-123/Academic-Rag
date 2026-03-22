@@ -72,7 +72,9 @@ def adminportal() -> None:
     django_manage = os.path.join(script_dir, "django_manage.py")
     args = [sys.executable, django_manage] + sys.argv[2:]
     if len(sys.argv) == 2:
-        args += ["runserver", "127.0.0.1:8000"]
+        admin_host = os.getenv("DJANGO_ADMIN_HOST", "127.0.0.1")
+        admin_port = os.getenv("DJANGO_ADMIN_PORT", "8001")
+        args += ["runserver", f"{admin_host}:{admin_port}"]
     completed = subprocess.run(args, check=False)
     sys.exit(completed.returncode)
 

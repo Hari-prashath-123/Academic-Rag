@@ -1,10 +1,33 @@
 # Backend Startup Guide
 
+## Quick Start (All-in-One)
+
+### Windows PowerShell
+```powershell
+cd backend
+.\start-all.ps1
+```
+
+### macOS / Linux
+```bash
+cd backend
+chmod +x start-all.sh
+./start-all.sh
+```
+
+This launches **both services simultaneously:**
+- **FastAPI REST API** on `http://127.0.0.1:8000`
+- **Django Admin Portal** on `http://127.0.0.1:8001` (started with `--noreload` for stable dual-process launch)
+
+---
+
 ## Prerequisites
 
 1. **PostgreSQL** running locally on `localhost:5432`
-2. **Python 3.12+** with virtual environment activated: `venv\Scripts\activate`
-3. **Dependencies installed**: `pip install -r requirements.txt`
+2. **Python 3.12+** with virtual environment: `venv/` (auto-created)
+3. **Dependencies installed**: Activate venv and run `pip install -r requirements.txt`
+
+---
 
 ## Environment Setup
 
@@ -15,6 +38,8 @@ Create a `.env` file in the `backend/` directory with:
 APP_ENV=development
 DEBUG=True
 LOG_LEVEL=INFO
+PORT=8000
+DJANGO_ADMIN_PORT=8001
 
 # Database (Local PostgreSQL)
 DB_HOST=localhost
@@ -29,162 +54,148 @@ ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=1440
 
 # CORS
-CORS_ORIGINS_RAW=http://localhost:3000,http://localhost:8000
+CORS_ORIGINS_RAW=http://localhost:3000,http://127.0.0.1:8000
 
-# OpenAI (for RAG features)
+# OpenAI (optional for RAG features)
 OPENAI_API_KEY=your-openai-api-key
-
-# Embeddings
-EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
 ```
 
-## Startup Steps
+---
 
-### 1. PostgreSQL Running
+## Service Ports
 
-Ensure PostgreSQL is running locally on `localhost:5432`. If using WSL/Linux:
+| Service | Port |
+|---------|------|
+| FastAPI REST API | 8000 |
+| Django Admin Portal | 8001 |
 
-```bash
-sudo service postgresql start
-```
+---
 
-Or verify via psql:
+## Individual Service Startup
 
-```bash
-psql -U postgres -c "SELECT 1;"
-```
+### FastAPI REST API (port 8000)
 
-### 2. Complete Database Setup (Recommended)
-
-Run the comprehensive setup script that will:
-- Create the database if it doesn't exist
-- Run all migrations
-- Seed default roles (student, faculty, admin)
-
-```bash
+**Windows:**
+```powershell
 cd backend
-python setup_db.py
-```
-
-**OR** manually run migrations (if database already exists):
-
-```bash
-python migrate.py
-```
-
-### 3. Create Superuser (Admin Account)
-
-```bash
-python create_superuser.py
-```
-
-You will be prompted to enter:
-- Email address
-- Password (min 6 characters)
-
-The script will:
-- Create a User account
-- Create an associated Profile
-- Create/assign the 'admin' role
-- Grant all permissions
-
-**Or use environment variables:**
-
-```bash
-CREATE_SUPERUSER_EMAIL=admin@example.com CREATE_SUPERUSER_PASSWORD=password123 python create_superuser.py
-```
-
-### 4. Start Backend Server
-
-```bash
+.\venv\Scripts\Activate.ps1
 python manage.py runserver
 ```
 
-Or with custom host/port:
-
+**macOS / Linux:**
 ```bash
-python manage.py runserver 127.0.0.1:8000
+cd backend
+source venv/bin/activate
+python manage.py runserver
 ```
 
-The server will start at: `http://127.0.0.1:8000`
+Access: `http://127.0.0.1:8000`
 
-## API Endpoints
+---
 
-### Authentication Endpoints
+### Django Admin Portal (port 8001)
 
+**Windows:**
+```powershell
+cd backend
+.\venv\Scripts\Activate.ps1
+python manage.py adminportal
+```
+
+**macOS / Linux:**
+```bash
+cd backend
+source venv/bin/activate
+python manage.py adminportal
+```
+
+Access: `http://127.0.0.1:8001/admin/`
+
+---
+
+## First-Time Setup
+
+Run these commands **once** before starting services:
+
+**Windows:**
+```powershell
+cd backend
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python migrate.py
+python django_manage.py migrate
+```
+
+**macOS / Linux:**
+```bash
+cd backend
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python migrate.py
+python django_manage.py migrate
+```
+
+---
+
+## Create Superuser (Admin Account)
+
+### For FastAPI:
+```bash
+source venv/bin/activate  # or .\venv\Scripts\Activate.ps1 on Windows
+python create_superuser.py
+```
+
+Or with environment variables:
+```bash
+CREATE_SUPERUSER_EMAIL=admin@test.local CREATE_SUPERUSER_PASSWORD=admin123 python create_superuser.py
+```
+
+### For Django Admin (already done):
+Django superuser is created after running `python django_manage.py migrate`
+
+---
+
+## Credentials
+
+### FastAPI REST API
+- **Email:** `admin@test.local`
+- **Password:** `admin123`
+- **Endpoint:** `POST http://127.0.0.1:8000/api/auth/login`
+
+### Django Admin Portal
+- **Username:** `hari`
+- **Password:** `123`
+- **URL:** `http://127.0.0.1:8001/admin/`
+
+---
+
+## API Endpoints & Documentation
+
+### FastAPI
+- **REST API Docs (Swagger):** http://127.0.0.1:8000/docs
+- **Alternative Docs (ReDoc):** http://127.0.0.1:8000/redoc
+- **Login Page:** http://127.0.0.1:8000/api/auth/login-page
+- **Health Check:** http://127.0.0.1:8000/health
+- **System Stats:** http://127.0.0.1:8000/stats
+
+### Authentication
+- `POST /api/auth/login` - Login with email/password
 - `POST /api/auth/register` - Register new user
-  - Request: `{ email, password, first_name, last_name, phone, default_role }`
-  - Response: `{ access_token, token_type }`
+- `GET /api/auth/me` - Get current user profile (protected)
 
-- `POST /api/auth/login` - Login user
-  - Request: `{ email, password }`
-  - Response: `{ access_token, token_type }`
+### Django Admin
+- **Users:** http://127.0.0.1:8001/admin/auth/user/
+- **Backend Users:** http://127.0.0.1:8001/admin/admin_users/portaluser/
+- **Roles:** http://127.0.0.1:8001/admin/admin_users/role/
+- **Permissions:** http://127.0.0.1:8001/admin/admin_users/rolepermission/
+- **User Roles:** http://127.0.0.1:8001/admin/admin_users/userrole/
+- **Profiles:** http://127.0.0.1:8001/admin/admin_users/profile/
 
-- `GET /api/auth/me` - Get current user (protected)
-  - Response: `{ id, email, roles, permissions, profile, created_at }`
-
-### Document Endpoints
-
-- `GET /api/documents` - List documents
-- `POST /api/documents` - Upload document
-- `GET /api/documents/{id}` - Get document
-- `DELETE /api/documents/{id}` - Delete document
-
-### RAG Endpoints
-
-- `POST /api/rag/query` - Query documents with RAG
+---
 
 ## Troubleshooting
-
-### Missing Database
-
-```
-psycopg2.OperationalError: database "academic_rag" does not exist
-```
-
-**Solution 1:** Use the setup_db.py script (recommended):
-```bash
-python setup_db.py
-```
-
-**Solution 2:** Create manually:
-```bash
-psql -U postgres -c "CREATE DATABASE academic_rag;"
-```
-
-### Migration Errors
-
-If migrations fail, common issues:
-
-1. **Database doesn't exist**: Use `python setup_db.py`
-2. **Connection refused**: Ensure PostgreSQL is running (see below)
-3. **Tables already exist**: Re-run `python migrate.py` - migrations are idempotent (IF NOT EXISTS)
-
-### Connection Refused (PostgreSQL)
-
-```
-Error: could not translate host name "localhost" to address: Name or service not known
-```
-
-**Solution:** Ensure PostgreSQL is running:
-```bash
-# Windows (native PostgreSQL)
-services.msc  # Search for PostgreSQL service and start it
-
-# WSL/Linux
-sudo service postgresql start
-
-# Or verify connection
-psql -U postgres -c "SELECT 1;"
-```
-
-### Import Errors
-
-If you see `ModuleNotFoundError` or `ImportError`:
-
-1. Ensure virtual environment is activated: `venv\Scripts\activate`
-2. Reinstall dependencies: `pip install -r requirements.txt`
-3. Check `backend/config.py` for environment variable issues
 
 ### Port Already in Use
 
@@ -192,17 +203,60 @@ If you see `ModuleNotFoundError` or `ImportError`:
 OSError: [Errno 48] Address already in use
 ```
 
-**Solution:** Kill the process using port 8000:
-```bash
-# Find process
-netstat -ano | findstr :8000
-
-# Kill process (replace PID with actual process ID)
-taskkill /PID <PID> /F
-
-# Or use different port
-python manage.py runserver 8001
+Set different ports:
+```powershell
+$env:PORT = "8888"
+$env:DJANGO_ADMIN_PORT = "8889"
+.\start-all.ps1
 ```
+
+### PostgreSQL Connection Error
+
+```
+psycopg2.OperationalError: connection to server at "localhost", port 5432 failed
+```
+
+**Verify PostgreSQL is running:**
+```bash
+psql -U postgres -c "SELECT 1;"
+```
+
+### Missing Dependencies
+
+```
+ModuleNotFoundError: No module named 'fastapi'
+```
+
+Reinstall dependencies:
+**Windows:**
+```powershell
+.\venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+```
+
+**macOS / Linux:**
+```bash
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+### Database Missing
+
+```
+psycopg2.OperationalError: database "academic_rag" does not exist
+```
+
+Create it:
+```bash
+psql -U postgres -c "CREATE DATABASE academic_rag;"
+```
+
+Then run migrations:
+```bash
+python migrate.py
+```
+
+---
 
 ## Frontend Integration
 
@@ -218,27 +272,20 @@ Frontend will be at: `http://localhost:3000`
 
 The frontend automatically connects to the backend via the API client in `lib/api.ts`.
 
-## Database Migrations
+---
 
-### Auto-running Migrations
+## Architecture Notes
 
-Migrations in `migrations/` directory are automatically run on backend startup via `migrate.py`.
+- **FastAPI (Port 8000):** REST API, user authentication, RAG pipeline
+- **Django Admin (Port 8001):** User management, role/permission administration
+- **Both services** share the same PostgreSQL database with unmanaged models to prevent ORM conflicts
+- **Password hashing:** Upgraded from passlib to pwdlib with Argon2 for modern security
 
-### Manual Migration
-
-```bash
-python migrate.py
-```
-
-### Creating New Migrations
-
-1. Update model in `models/`
-2. Add SQL migration file to `migrations/` with format: `NNN_description.sql`
-3. Restart backend to auto-run
+---
 
 ## Development Tips
 
-- **Watch mode**: Backend auto-reloads on file changes
-- **Logs**: Check `logs/` directory for server logs
-- **API docs**: Visit `http://127.0.0.1:8000/docs` for Swagger UI
-- **Debug mode**: Set `DEBUG=True` in `.env`
+- **Auto-reload:** Files are monitored; changes trigger automatic restarts
+- **Logs:** Check console output for errors and debugging info
+- **API Docs:** Visit http://127.0.0.1:8000/docs for interactive API documentation
+- **Debug mode:** Set `DEBUG=True` in `.env` for detailed error messages

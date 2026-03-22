@@ -3,7 +3,11 @@ import uuid
 from django.db import models
 
 
-class PortalUser(models.Model):
+class User(models.Model):
+    """Unified User model for authentication and authorization.
+    
+    Note: Managed by SQLAlchemy in FastAPI. Django admin provides UI access.
+    """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
     password_hash = models.CharField(max_length=255)
@@ -13,8 +17,6 @@ class PortalUser(models.Model):
     class Meta:
         managed = False
         db_table = "users"
-        verbose_name = "Backend User"
-        verbose_name_plural = "Backend Users"
 
     def __str__(self) -> str:
         return self.email
@@ -48,7 +50,8 @@ class RolePermission(models.Model):
 
 
 class UserRole(models.Model):
-    user = models.ForeignKey(PortalUser, on_delete=models.CASCADE, db_column="user_id", related_name="user_roles")
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, db_column="user_id", related_name="user_roles")
     role = models.ForeignKey(Role, on_delete=models.CASCADE, db_column="role_id", related_name="user_roles")
 
     class Meta:
@@ -62,7 +65,7 @@ class UserRole(models.Model):
 
 class Profile(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.OneToOneField(PortalUser, on_delete=models.CASCADE, db_column="user_id", related_name="profile")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, db_column="user_id", related_name="profile")
     first_name = models.CharField(max_length=255, null=True, blank=True)
     last_name = models.CharField(max_length=255, null=True, blank=True)
     avatar_url = models.URLField(null=True, blank=True)
