@@ -38,3 +38,10 @@ def init_db():
 # Import models to ensure they are registered with Base
 from .college import College  # noqa: E402, F401
 from .question_analysis import QuestionAnalysis  # noqa: E402, F401
+from .user import Profile, User  # noqa: E402, F401
+from .role import Role, RolePermission, UserRole  # noqa: E402, F401
+from .document import Document  # noqa: E402, F401
+from .query import Query  # noqa: E402, F401
+from .mark import AssessmentType, Mark  # noqa: E402, F401
+from .note import Note  # noqa: E402, F401
+from .chat import ChatHistory, MessageRole  # noqa: E402, F401

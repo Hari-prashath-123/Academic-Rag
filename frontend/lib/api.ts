@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosError } from 'axios'
 
-const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+const configuredApiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'
+const baseURL = configuredApiUrl.replace(/\/$/, '')
 
 const api = axios.create({
   baseURL,

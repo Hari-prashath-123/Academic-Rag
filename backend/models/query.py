@@ -1,5 +1,5 @@
 """Query model for storing chat history and RAG queries"""
-from sqlalchemy import Column, String, DateTime, ForeignKey, Text, JSON, text
+from sqlalchemy import Column, String, DateTime, ForeignKey, Text, JSON, Integer, text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from datetime import datetime

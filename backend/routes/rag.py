@@ -45,7 +45,7 @@ async def query_documents(
             subject=query_data.subject,
             document_type=query_data.document_type,
             session_id=session_id,
-            current_college_id=current_user.college_id
+            current_college_id=getattr(current_user, "college_id", None)
         )
     except Exception as e:
         raise HTTPException(

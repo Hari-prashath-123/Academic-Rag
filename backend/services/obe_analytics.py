@@ -42,12 +42,13 @@ def calculate_co_attainment(subject_id: str, college_id: str, threshold: float =
     db = SessionLocal()
     try:
         # Query marks for subject and students belonging to the college
-        marks = (
-            db.query(Mark)
-            .join(User, Mark.student_id == User.id)
-            .filter(Mark.subject == subject_id, User.college_id == college_id)
-            .all()
-        )
+        marks_query = db.query(Mark).filter(Mark.subject == subject_id)
+
+        # Apply college filter only if the current User model exposes college_id.
+        if hasattr(User, "college_id") and college_id:
+            marks_query = marks_query.join(User, Mark.student_id == User.id).filter(User.college_id == college_id)
+
+        marks = marks_query.all()
 
         # Organize scores per CO per student
         co_student_scores = {}  # co -> {student_id: [percentages]}
@@ -179,7 +180,7 @@ from typing import Dict, List, Any, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from models.mark import Mark, AssessmentType
-from models.user import User, UserRole
+from models.user import User
 from config import settings
 
 class OBEAnalytics:

@@ -3,6 +3,7 @@ Embedding service for generating and managing vector embeddings
 """
 import os
 import pickle
+import hashlib
 from typing import List, Dict, Any
 import numpy as np
 from langchain_openai import OpenAIEmbeddings
@@ -11,15 +12,40 @@ from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document as LangchainDocument
 from config import settings
 
+
+class LocalDeterministicEmbeddings:
+    """Deterministic local embeddings fallback when external API keys are unavailable."""
+
+    def __init__(self, dimension: int):
+        self.dimension = dimension
+
+    def _embed_text(self, text: str) -> List[float]:
+        # Stable seed from text hash for deterministic vectors across restarts.
+        digest = hashlib.sha256(text.encode("utf-8")).digest()
+        seed = int.from_bytes(digest[:8], byteorder="big", signed=False)
+        rng = np.random.default_rng(seed)
+        return rng.standard_normal(self.dimension).astype(np.float32).tolist()
+
+    def embed_documents(self, texts: List[str]) -> List[List[float]]:
+        return [self._embed_text(text) for text in texts]
+
+    def embed_query(self, text: str) -> List[float]:
+        return self._embed_text(text)
+
 class EmbeddingService:
     """Service for generating embeddings and managing vector store"""
     
     def __init__(self):
         """Initialize embedding service"""
-        self.embeddings = OpenAIEmbeddings(
-            openai_api_key=settings.OPENAI_API_KEY,
-            model=settings.EMBEDDING_MODEL
-        )
+        if settings.OPENAI_API_KEY:
+            self.embeddings = OpenAIEmbeddings(
+                openai_api_key=settings.OPENAI_API_KEY,
+                model=settings.EMBEDDING_MODEL
+            )
+        else:
+            # Allow local development without OpenAI credentials.
+            print("OPENAI_API_KEY not set; using local deterministic embeddings fallback.")
+            self.embeddings = LocalDeterministicEmbeddings(settings.VECTOR_DIMENSION)
         
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=settings.CHUNK_SIZE,

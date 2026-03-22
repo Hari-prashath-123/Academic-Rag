@@ -3,7 +3,7 @@ Question paper analysis service using LLM
 """
 from typing import List, Dict, Any
 from langchain_openai import ChatOpenAI
-from langchain.prompts import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 from sqlalchemy.orm import Session
 from models.document import Document
 from models.question_analysis import QuestionAnalysis

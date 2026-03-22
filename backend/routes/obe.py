@@ -251,7 +251,7 @@ async def calculate_obes(
 
     If `college_id` is not provided in the request, defaults to the current user's college.
     """
-    college_id = request.college_id or current_user.college_id
+    college_id = request.college_id or getattr(current_user, "college_id", None)
     if not college_id:
         raise HTTPException(status_code=400, detail="college_id must be provided or user must belong to a college")
 

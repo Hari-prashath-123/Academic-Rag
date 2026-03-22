@@ -1,0 +1,313 @@
+2026-03-22 10:17:59 | INFO     | app:lifespan:48 - Starting Academic RAG Assistant API
+2026-03-22 10:17:59 | INFO     | app:lifespan:49 - Environment: development
+2026-03-22 10:17:59 | INFO     | app:lifespan:50 - Debug mode: True
+2026-03-22 10:17:59 | INFO     | app:lifespan:56 - PostgreSQL connection via SQLAlchemy is healthy
+2026-03-22 10:17:59 | INFO     | app:lifespan:57 - Database schema initialization is managed by migrate.py
+2026-03-22 10:17:59 | INFO     | app:lifespan:66 - PostgreSQL connection via psycopg2 is healthy
+2026-03-22 10:22:34 | INFO     | app:lifespan:48 - Starting Academic RAG Assistant API
+2026-03-22 10:22:34 | INFO     | app:lifespan:49 - Environment: development
+2026-03-22 10:22:34 | INFO     | app:lifespan:50 - Debug mode: True
+2026-03-22 10:22:34 | INFO     | app:lifespan:56 - PostgreSQL connection via SQLAlchemy is healthy
+2026-03-22 10:22:34 | INFO     | app:lifespan:57 - Database schema initialization is managed by migrate.py
+2026-03-22 10:22:35 | INFO     | app:lifespan:66 - PostgreSQL connection via psycopg2 is healthy
+2026-03-22 10:27:11 | INFO     | app:lifespan:48 - Starting Academic RAG Assistant API
+2026-03-22 10:27:11 | INFO     | app:lifespan:49 - Environment: development
+2026-03-22 10:27:11 | INFO     | app:lifespan:50 - Debug mode: True
+2026-03-22 10:27:11 | INFO     | app:lifespan:56 - PostgreSQL connection via SQLAlchemy is healthy
+2026-03-22 10:27:11 | INFO     | app:lifespan:57 - Database schema initialization is managed by migrate.py
+2026-03-22 10:27:11 | INFO     | app:lifespan:66 - PostgreSQL connection via psycopg2 is healthy
+2026-03-22 10:27:18 | INFO     | app:log_requests:107 - Incoming request: GET /
+2026-03-22 10:27:18 | INFO     | app:log_requests:116 - Completed: GET / - Status: 307 - Time: 0.007s
+2026-03-22 10:27:18 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/login-page
+2026-03-22 10:27:18 | INFO     | app:log_requests:116 - Completed: GET /api/auth/login-page - Status: 200 - Time: 0.010s
+2026-03-22 10:29:57 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-22 10:29:57 | WARNING  | app:validation_exception_handler:133 - Validation error on /api/auth/login: [{'type': 'value_error', 'loc': ('body', 'email'), 'msg': 'value is not a valid email address: The part after the @-sign is a special-use or reserved name that cannot be used with email.', 'input': 'admin@test.local', 'ctx': {'reason': 'The part after the @-sign is a special-use or reserved name that cannot be used with email.'}}]
+2026-03-22 10:29:57 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 422 - Time: 0.070s
+2026-03-22 10:30:21 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-22 10:30:21 | WARNING  | app:validation_exception_handler:133 - Validation error on /api/auth/login: [{'type': 'value_error', 'loc': ('body', 'email'), 'msg': 'value is not a valid email address: The part after the @-sign is a special-use or reserved name that cannot be used with email.', 'input': 'admin@test.local', 'ctx': {'reason': 'The part after the @-sign is a special-use or reserved name that cannot be used with email.'}}]
+2026-03-22 10:30:21 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 422 - Time: 0.008s
+2026-03-22 10:30:29 | INFO     | app:log_requests:107 - Incoming request: GET /.well-known/appspecific/com.chrome.devtools.json
+2026-03-22 10:30:29 | INFO     | app:log_requests:116 - Completed: GET /.well-known/appspecific/com.chrome.devtools.json - Status: 404 - Time: 0.004s
+2026-03-22 10:33:25 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-22 10:33:25 | WARNING  | app:validation_exception_handler:133 - Validation error on /api/auth/login: [{'type': 'value_error', 'loc': ('body', 'email'), 'msg': 'value is not a valid email address: The part after the @-sign is a special-use or reserved name that cannot be used with email.', 'input': 'admin@test.local', 'ctx': {'reason': 'The part after the @-sign is a special-use or reserved name that cannot be used with email.'}}]
+2026-03-22 10:33:25 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 422 - Time: 0.023s
+2026-03-22 10:33:27 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-22 10:33:27 | WARNING  | app:validation_exception_handler:133 - Validation error on /api/auth/login: [{'type': 'value_error', 'loc': ('body', 'email'), 'msg': 'value is not a valid email address: The part after the @-sign is a special-use or reserved name that cannot be used with email.', 'input': 'admin@test.local', 'ctx': {'reason': 'The part after the @-sign is a special-use or reserved name that cannot be used with email.'}}]
+2026-03-22 10:33:27 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 422 - Time: 0.015s
+2026-03-22 10:33:27 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-22 10:33:27 | WARNING  | app:validation_exception_handler:133 - Validation error on /api/auth/login: [{'type': 'value_error', 'loc': ('body', 'email'), 'msg': 'value is not a valid email address: The part after the @-sign is a special-use or reserved name that cannot be used with email.', 'input': 'admin@test.local', 'ctx': {'reason': 'The part after the @-sign is a special-use or reserved name that cannot be used with email.'}}]
+2026-03-22 10:33:27 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 422 - Time: 0.011s
+2026-03-22 10:33:27 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-22 10:33:27 | WARNING  | app:validation_exception_handler:133 - Validation error on /api/auth/login: [{'type': 'value_error', 'loc': ('body', 'email'), 'msg': 'value is not a valid email address: The part after the @-sign is a special-use or reserved name that cannot be used with email.', 'input': 'admin@test.local', 'ctx': {'reason': 'The part after the @-sign is a special-use or reserved name that cannot be used with email.'}}]
+2026-03-22 10:33:27 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 422 - Time: 0.013s
+2026-03-22 10:34:47 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-22 10:34:47 | WARNING  | app:validation_exception_handler:133 - Validation error on /api/auth/login: [{'type': 'value_error', 'loc': ('body', 'email'), 'msg': 'value is not a valid email address: The part after the @-sign is a special-use or reserved name that cannot be used with email.', 'input': 'admin@test.local', 'ctx': {'reason': 'The part after the @-sign is a special-use or reserved name that cannot be used with email.'}}]
+2026-03-22 10:34:47 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 422 - Time: 0.015s
+2026-03-22 10:35:42 | INFO     | app:lifespan:77 - Shutting down Academic RAG Assistant API
+2026-03-22 10:36:14 | INFO     | app:lifespan:48 - Starting Academic RAG Assistant API
+2026-03-22 10:36:14 | INFO     | app:lifespan:49 - Environment: development
+2026-03-22 10:36:14 | INFO     | app:lifespan:50 - Debug mode: True
+2026-03-22 10:36:14 | INFO     | app:lifespan:56 - PostgreSQL connection via SQLAlchemy is healthy
+2026-03-22 10:36:14 | INFO     | app:lifespan:57 - Database schema initialization is managed by migrate.py
+2026-03-22 10:36:14 | INFO     | app:lifespan:66 - PostgreSQL connection via psycopg2 is healthy
+2026-03-22 10:36:14 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-22 10:36:15 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 200 - Time: 0.860s
+2026-03-22 10:43:25 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-22 10:43:26 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 200 - Time: 0.477s
+2026-03-22 10:44:07 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-22 10:44:08 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 200 - Time: 1.037s
+2026-03-22 10:45:36 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:45:36 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.008s
+2026-03-22 10:45:37 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:45:37 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.005s
+2026-03-22 10:45:37 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:45:37 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:45:38 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:45:38 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.003s
+2026-03-22 10:45:38 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:45:38 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.000s
+2026-03-22 10:45:39 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:45:39 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:45:39 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:45:39 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.000s
+2026-03-22 10:45:40 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:45:40 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:47:27 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:27 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:47:27 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:27 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.005s
+2026-03-22 10:47:28 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:28 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:47:28 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:28 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.003s
+2026-03-22 10:47:29 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:29 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:47:29 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:29 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:47:30 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:30 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:47:31 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:31 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.003s
+2026-03-22 10:47:32 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:32 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.003s
+2026-03-22 10:47:32 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:32 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.003s
+2026-03-22 10:47:33 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:33 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.003s
+2026-03-22 10:47:33 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:33 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:47:34 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:34 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.000s
+2026-03-22 10:47:35 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:35 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.003s
+2026-03-22 10:47:35 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:35 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.005s
+2026-03-22 10:47:44 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:44 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.000s
+2026-03-22 10:47:44 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:44 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.000s
+2026-03-22 10:47:45 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:45 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.003s
+2026-03-22 10:47:46 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:46 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.003s
+2026-03-22 10:47:46 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:46 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.009s
+2026-03-22 10:47:47 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:47 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:47:48 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:48 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:47:48 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:48 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.000s
+2026-03-22 10:47:49 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:49 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:47:49 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:49 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.003s
+2026-03-22 10:47:50 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:50 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.000s
+2026-03-22 10:47:51 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:51 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:47:52 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:52 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.003s
+2026-03-22 10:47:52 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:52 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.003s
+2026-03-22 10:47:53 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:53 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:47:53 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:53 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:47:54 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:54 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.000s
+2026-03-22 10:47:54 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:54 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:47:55 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:55 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.006s
+2026-03-22 10:47:56 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:56 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.000s
+2026-03-22 10:47:56 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:56 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.003s
+2026-03-22 10:47:57 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:57 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:47:57 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:57 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:47:58 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:58 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:47:58 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:58 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.006s
+2026-03-22 10:47:59 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:47:59 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.006s
+2026-03-22 10:48:00 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:00 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:48:00 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:00 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.000s
+2026-03-22 10:48:01 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:01 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:48:01 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:01 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:48:02 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:02 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:48:03 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:03 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.010s
+2026-03-22 10:48:03 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:03 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:48:04 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:04 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:48:05 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:05 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:48:05 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:05 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:48:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:06 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.003s
+2026-03-22 10:48:07 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:07 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.000s
+2026-03-22 10:48:07 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:07 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:48:08 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:08 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:48:08 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:08 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:48:09 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:09 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.003s
+2026-03-22 10:48:10 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:10 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.001s
+2026-03-22 10:48:10 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:10 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:48:11 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:11 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.003s
+2026-03-22 10:48:11 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:11 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:48:12 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:12 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:48:13 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:13 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.000s
+2026-03-22 10:48:13 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:13 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:48:14 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:14 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:48:15 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:15 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:48:15 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:15 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:48:16 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:16 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.006s
+2026-03-22 10:48:16 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:16 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.000s
+2026-03-22 10:48:17 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:17 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.000s
+2026-03-22 10:48:18 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:18 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:48:18 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:18 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.001s
+2026-03-22 10:48:19 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:19 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.005s
+2026-03-22 10:48:19 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:19 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:48:20 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:20 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:48:21 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:21 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:48:21 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:21 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.003s
+2026-03-22 10:48:22 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:22 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.003s
+2026-03-22 10:48:23 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:23 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:48:23 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:23 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:48:24 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:24 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:48:25 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:25 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.000s
+2026-03-22 10:48:25 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:25 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:48:26 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:26 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.002s
+2026-03-22 10:48:26 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:26 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.005s
+2026-03-22 10:48:27 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:48:27 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.004s
+2026-03-22 10:49:05 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/auth/login
+2026-03-22 10:49:05 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/auth/login - Status: 200 - Time: 0.000s
+2026-03-22 10:49:05 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-22 10:49:06 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 200 - Time: 1.023s
+2026-03-22 10:49:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/auth/me
+2026-03-22 10:49:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/auth/me - Status: 200 - Time: 0.002s
+2026-03-22 10:49:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-22 10:49:06 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 200 - Time: 0.053s
+2026-03-22 10:49:17 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/login-page
+2026-03-22 10:49:17 | INFO     | app:log_requests:116 - Completed: GET /api/auth/login-page - Status: 200 - Time: 0.006s
+2026-03-22 10:49:23 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-22 10:49:24 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 200 - Time: 1.000s
+2026-03-22 10:55:49 | INFO     | app:lifespan:77 - Shutting down Academic RAG Assistant API
+2026-03-22 10:56:21 | INFO     | app:lifespan:48 - Starting Academic RAG Assistant API
+2026-03-22 10:56:21 | INFO     | app:lifespan:49 - Environment: development
+2026-03-22 10:56:21 | INFO     | app:lifespan:50 - Debug mode: True
+2026-03-22 10:56:21 | INFO     | app:lifespan:56 - PostgreSQL connection via SQLAlchemy is healthy
+2026-03-22 10:56:21 | INFO     | app:lifespan:57 - Database schema initialization is managed by migrate.py
+2026-03-22 10:56:22 | INFO     | app:lifespan:66 - PostgreSQL connection via psycopg2 is healthy
+2026-03-22 10:56:22 | INFO     | app:lifespan:77 - Shutting down Academic RAG Assistant API
+2026-03-22 10:56:45 | INFO     | app:lifespan:48 - Starting Academic RAG Assistant API
+2026-03-22 10:56:45 | INFO     | app:lifespan:49 - Environment: development
+2026-03-22 10:56:45 | INFO     | app:lifespan:50 - Debug mode: True
+2026-03-22 10:56:45 | INFO     | app:lifespan:56 - PostgreSQL connection via SQLAlchemy is healthy
+2026-03-22 10:56:45 | INFO     | app:lifespan:57 - Database schema initialization is managed by migrate.py
+2026-03-22 10:56:46 | INFO     | app:lifespan:66 - PostgreSQL connection via psycopg2 is healthy
+2026-03-22 10:56:46 | INFO     | app:lifespan:77 - Shutting down Academic RAG Assistant API
+2026-03-22 10:57:11 | INFO     | app:lifespan:48 - Starting Academic RAG Assistant API
+2026-03-22 10:57:11 | INFO     | app:lifespan:49 - Environment: development
+2026-03-22 10:57:11 | INFO     | app:lifespan:50 - Debug mode: True
+2026-03-22 10:57:11 | INFO     | app:lifespan:56 - PostgreSQL connection via SQLAlchemy is healthy
+2026-03-22 10:57:11 | INFO     | app:lifespan:57 - Database schema initialization is managed by migrate.py
+2026-03-22 10:57:11 | INFO     | app:lifespan:66 - PostgreSQL connection via psycopg2 is healthy
+2026-03-22 10:58:42 | INFO     | app:lifespan:77 - Shutting down Academic RAG Assistant API
+2026-03-22 10:59:15 | INFO     | app:lifespan:48 - Starting Academic RAG Assistant API
+2026-03-22 10:59:15 | INFO     | app:lifespan:49 - Environment: development
+2026-03-22 10:59:15 | INFO     | app:lifespan:50 - Debug mode: True
+2026-03-22 10:59:16 | INFO     | app:lifespan:56 - PostgreSQL connection via SQLAlchemy is healthy
+2026-03-22 10:59:16 | INFO     | app:lifespan:57 - Database schema initialization is managed by migrate.py
+2026-03-22 10:59:16 | INFO     | app:lifespan:66 - PostgreSQL connection via psycopg2 is healthy
+2026-03-22 10:59:16 | INFO     | app:lifespan:77 - Shutting down Academic RAG Assistant API
+2026-03-22 10:59:40 | INFO     | app:lifespan:48 - Starting Academic RAG Assistant API
+2026-03-22 10:59:40 | INFO     | app:lifespan:49 - Environment: development
+2026-03-22 10:59:40 | INFO     | app:lifespan:50 - Debug mode: True
+2026-03-22 10:59:41 | INFO     | app:lifespan:56 - PostgreSQL connection via SQLAlchemy is healthy
+2026-03-22 10:59:41 | INFO     | app:lifespan:57 - Database schema initialization is managed by migrate.py
+2026-03-22 10:59:41 | INFO     | app:lifespan:66 - PostgreSQL connection via psycopg2 is healthy
+2026-03-22 10:59:41 | INFO     | app:lifespan:77 - Shutting down Academic RAG Assistant API
+2026-03-22 11:00:05 | INFO     | app:lifespan:48 - Starting Academic RAG Assistant API
+2026-03-22 11:00:05 | INFO     | app:lifespan:49 - Environment: development
+2026-03-22 11:00:05 | INFO     | app:lifespan:50 - Debug mode: True
+2026-03-22 11:00:05 | INFO     | app:lifespan:56 - PostgreSQL connection via SQLAlchemy is healthy
+2026-03-22 11:00:05 | INFO     | app:lifespan:57 - Database schema initialization is managed by migrate.py
+2026-03-22 11:00:05 | INFO     | app:lifespan:66 - PostgreSQL connection via psycopg2 is healthy
+2026-03-22 11:01:09 | INFO     | app:log_requests:107 - Incoming request: GET /
+2026-03-22 11:01:09 | INFO     | app:log_requests:116 - Completed: GET / - Status: 307 - Time: 0.006s
+2026-03-22 11:01:09 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/login-page
+2026-03-22 11:01:09 | INFO     | app:log_requests:116 - Completed: GET /api/auth/login-page - Status: 200 - Time: 0.004s
+2026-03-22 11:01:32 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-22 11:01:32 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 401 - Time: 0.140s
+2026-03-22 11:01:33 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-22 11:01:33 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 401 - Time: 0.013s
+2026-03-22 11:10:44 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-22 11:10:44 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 401 - Time: 0.022s
+2026-03-22 11:11:14 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-22 11:11:14 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 401 - Time: 0.016s
+2026-03-22 11:12:48 | INFO     | app:lifespan:77 - Shutting down Academic RAG Assistant API

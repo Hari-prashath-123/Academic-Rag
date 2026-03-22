@@ -1,26 +1,23 @@
 'use client'
 
-import React from "react"
-
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Mail, Lock, User, Briefcase, Check } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Mail, Lock, User, Check } from 'lucide-react'
 import { Card } from '@/components/ui/card'
-import api from '../../../lib/api'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import api from '@/lib/api'
 
 export default function SignupPage() {
   const router = useRouter()
-  const [role, setRole] = useState<'student' | 'faculty' | null>(null)
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
-    institutionId: '',
-    collegeId: '',
+    phone: '',
   })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -45,12 +42,7 @@ export default function SignupPage() {
     e.preventDefault()
     setError('')
 
-    if (!role) {
-      setError('Please select your role')
-      return
-    }
-
-    if (!formData.name || !formData.email || !formData.password) {
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
       setError('Please fill in all required fields')
       return
     }
@@ -60,27 +52,23 @@ export default function SignupPage() {
       return
     }
 
-    if (formData.password.length < 8) {
-      setError('Password must be at least 8 characters')
-      return
-    }
-
-    if (role === 'faculty' && !formData.institutionId) {
-      setError('Faculty ID is required for faculty accounts')
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters')
       return
     }
 
     setIsLoading(true)
     try {
       const payload = {
-        name: formData.name,
-        email: formData.email,
+        email: formData.email.trim(),
         password: formData.password,
-        role: role,
-        college_id: formData.collegeId || undefined
+        first_name: formData.firstName.trim(),
+        last_name: formData.lastName.trim(),
+        phone: formData.phone.trim() || undefined,
+        default_role: 'student',
       }
 
-      const res = await api.post('/auth/register', payload)
+      const res = await api.post('/api/auth/register', payload)
       if (res && res.status === 201) {
         // Registration successful -> redirect to login
         router.push('/auth/login')
@@ -102,21 +90,6 @@ export default function SignupPage() {
     strong: { color: 'bg-green-500', label: 'Strong', width: '100%' },
   }
 
-  const roleOptions = [
-    {
-      id: 'student',
-      title: 'Student',
-      description: 'Access course materials and assessments',
-      icon: User,
-    },
-    {
-      id: 'faculty',
-      title: 'Faculty',
-      description: 'Create courses and manage assessments',
-      icon: Briefcase,
-    },
-  ]
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/10 flex items-center justify-center p-4 py-12">
       <div className="w-full max-w-md">
@@ -133,54 +106,34 @@ export default function SignupPage() {
 
         <Card className="border-border/50 bg-card/80 backdrop-blur p-6 space-y-5">
           <form onSubmit={handleSignup} className="space-y-5">
-            {/* Role Selection */}
-            <div className="space-y-3">
-              <label className="block text-sm font-medium text-foreground">
-                Select Your Role
-              </label>
-              <div className="grid grid-cols-2 gap-3">
-                {roleOptions.map((option) => {
-                  const Icon = option.icon
-                  return (
-                    <button
-                      key={option.id}
-                      type="button"
-                      onClick={() => setRole(option.id as 'student' | 'faculty')}
-                      className={`p-4 rounded-lg border-2 transition-all ${
-                        role === option.id
-                          ? 'border-primary bg-primary/10'
-                          : 'border-border/30 bg-card/30 hover:border-border/60'
-                      }`}
-                    >
-                      <Icon className="w-6 h-6 mb-2 mx-auto" />
-                      <p className="font-semibold text-sm text-foreground">
-                        {option.title}
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {option.description}
-                      </p>
-                    </button>
-                  )
-                })}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <label htmlFor="first-name" className="block text-sm font-medium text-foreground">
+                  First Name
+                </label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    id="first-name"
+                    type="text"
+                    placeholder="John"
+                    value={formData.firstName}
+                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                    className="pl-10 bg-secondary/50 border-border/50"
+                  />
+                </div>
               </div>
-            </div>
-
-            {/* Full Name */}
-            <div className="space-y-2">
-              <label htmlFor="name" className="block text-sm font-medium text-foreground">
-                Full Name
-              </label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <div className="space-y-2">
+                <label htmlFor="last-name" className="block text-sm font-medium text-foreground">
+                  Last Name
+                </label>
                 <Input
-                  id="name"
+                  id="last-name"
                   type="text"
-                  placeholder="John Doe"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  className="pl-10 bg-secondary/50 border-border/50"
+                  placeholder="Doe"
+                  value={formData.lastName}
+                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                  className="bg-secondary/50 border-border/50"
                 />
               </div>
             </div>
@@ -205,43 +158,19 @@ export default function SignupPage() {
               </div>
             </div>
 
-            {/* Faculty ID (conditional) */}
-            {role === 'faculty' && (
-              <div className="space-y-2">
-                <label htmlFor="faculty-id" className="block text-sm font-medium text-foreground">
-                  Faculty ID
-                </label>
-                <div className="relative">
-                  <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    id="faculty-id"
-                    type="text"
-                    placeholder="FAC123456"
-                    value={formData.institutionId}
-                    onChange={(e) =>
-                      setFormData({ ...formData, institutionId: e.target.value })
-                    }
-                    className="pl-10 bg-secondary/50 border-border/50"
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* College ID (optional) */}
+            {/* Phone (optional) */}
             <div className="space-y-2">
-              <label htmlFor="college-id" className="block text-sm font-medium text-foreground">
-                College ID (optional)
+              <label htmlFor="phone" className="block text-sm font-medium text-foreground">
+                Phone (optional)
               </label>
-              <div className="relative">
-                <Input
-                  id="college-id"
-                  type="text"
-                  placeholder="college-uuid-or-code"
-                  value={formData.collegeId}
-                  onChange={(e) => setFormData({ ...formData, collegeId: e.target.value })}
-                  className="pl-3 bg-secondary/50 border-border/50"
-                />
-              </div>
+              <Input
+                id="phone"
+                type="tel"
+                placeholder="+91 98765 43210"
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                className="pl-3 bg-secondary/50 border-border/50"
+              />
             </div>
 
             {/* Password */}

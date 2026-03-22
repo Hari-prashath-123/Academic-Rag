@@ -1,11 +1,12 @@
 """
 Pydantic schemas for request/response validation
 """
-from pydantic import BaseModel, EmailStr, Field, validator
-from typing import Optional, List, Dict
 from datetime import datetime
+from typing import Dict, List, Optional
 from uuid import UUID
-from models.user import UserRole
+
+from pydantic import BaseModel, EmailStr, Field, validator
+
 from models.document import DocumentType, IndexingStatus
 from models.mark import AssessmentType
 
@@ -13,11 +14,13 @@ from models.mark import AssessmentType
 
 class UserRegister(BaseModel):
     """User registration request"""
-    name: str = Field(..., min_length=2, max_length=100)
     email: EmailStr
     password: str = Field(..., min_length=6, max_length=100)
-    role: Optional[UserRole] = UserRole.STUDENT
-    college_id: Optional[UUID] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    phone: Optional[str] = None
+    avatar_url: Optional[str] = None
+    default_role: str = "student"
 
 class UserLogin(BaseModel):
     """User login request"""
@@ -31,12 +34,12 @@ class Token(BaseModel):
 
 class UserResponse(BaseModel):
     """User response"""
-    id: int
-    name: str
+    id: str
     email: str
-    role: str
-    college_id: Optional[UUID]
-    created_at: Optional[datetime]
+    roles: List[str]
+    permissions: List[str]
+    profile: Optional[dict] = None
+    created_at: Optional[datetime] = None
     
     class Config:
         from_attributes = True
@@ -51,15 +54,15 @@ class DocumentUpload(BaseModel):
 
 class DocumentResponse(BaseModel):
     """Document response"""
-    id: int
+    id: str
     title: str
-    subject: str
+    subject: Optional[str]
     document_type: str
     file_path: str
     file_url: Optional[str]
     file_size: Optional[int]
-    uploaded_by: int
-    upload_date: datetime
+    uploader_id: str
+    uploaded_at: datetime
     indexing_status: str
     indexed_at: Optional[datetime]
     chunk_count: int

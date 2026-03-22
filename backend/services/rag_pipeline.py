@@ -3,11 +3,45 @@ RAG pipeline service for retrieval-augmented generation
 """
 from typing import List, Dict, Any, Optional
 from langchain_openai import ChatOpenAI
-from langchain.memory import ConversationBufferMemory
-from langchain.prompts import PromptTemplate
+from langchain_community.chat_message_histories import ChatMessageHistory
+from langchain_core.prompts import PromptTemplate
 from langchain_core.documents import Document as LangchainDocument
+from langchain_core.messages import HumanMessage, AIMessage, BaseMessage
 from services.embeddings import EmbeddingService
 from config import settings
+
+
+class SimpleConversationMemory:
+    """Simple conversation memory that stores messages"""
+    
+    def __init__(self, memory_key: str = "chat_history", return_messages: bool = True, output_key: str = "answer"):
+        """Initialize conversation memory"""
+        self.memory_key = memory_key
+        self.return_messages = return_messages
+        self.output_key = output_key
+        self.messages: List[BaseMessage] = []
+        
+    def save_context(self, inputs: Dict[str, str], outputs: Dict[str, str]):
+        """Save context to memory"""
+        if "input" in inputs:
+            self.messages.append(HumanMessage(content=inputs["input"]))
+        if self.output_key in outputs:
+            self.messages.append(AIMessage(content=outputs[self.output_key]))
+    
+    def load_memory_variables(self) -> Dict[str, Any]:
+        """Load memory variables"""
+        if self.return_messages:
+            return {self.memory_key: self.messages}
+        else:
+            return {self.memory_key: "\n".join([f"{msg.type}: {msg.content}" for msg in self.messages])}
+    
+    @property
+    def chat_memory(self):
+        """Return chat memory object with messages attribute"""
+        class ChatMemory:
+            def __init__(self, messages):
+                self.messages = messages
+        return ChatMemory(self.messages)
 
 class RAGPipeline:
     """RAG pipeline for question answering with document context"""
@@ -24,7 +58,7 @@ class RAGPipeline:
         )
         
         # Conversation memories by session
-        self.memories: Dict[str, ConversationBufferMemory] = {}
+        self.memories: Dict[str, SimpleConversationMemory] = {}
         
         # Custom prompt template
         # Instruct the generator (sonar) to prioritize retrieved document context
@@ -41,10 +75,10 @@ class RAGPipeline:
             input_variables=["context", "question"]
         )
     
-    def _get_or_create_memory(self, session_id: str) -> ConversationBufferMemory:
+    def _get_or_create_memory(self, session_id: str) -> SimpleConversationMemory:
         """Get or create conversation memory for session"""
         if session_id not in self.memories:
-            self.memories[session_id] = ConversationBufferMemory(
+            self.memories[session_id] = SimpleConversationMemory(
                 memory_key="chat_history",
                 return_messages=True,
                 output_key="answer"

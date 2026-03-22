@@ -1,16 +1,17 @@
-"""
-Authentication utilities for JWT tokens and password hashing
-"""
+"""Authentication utilities for JWT tokens, password hashing, and RBAC guards."""
 from datetime import datetime, timedelta
-from typing import Optional, Dict
+from typing import Dict, Optional
+from uuid import UUID
+
+from fastapi import Depends, HTTPException, Security, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from fastapi import HTTPException, Security, Depends
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
+
 from config import settings
 from models import get_db
-from models.user import User, UserRole
+from models.user import User
 
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -18,107 +19,141 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # Security scheme
 security = HTTPBearer()
 
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """
-    Verify a plain password against a hashed password
-    """
+    """Verify a plain password against a hashed password."""
     return pwd_context.verify(plain_password, hashed_password)
 
+
 def get_password_hash(password: str) -> str:
-    """
-    Hash a password
-    """
+    """Hash a password."""
     return pwd_context.hash(password)
 
+
+def get_user_roles_and_permissions(user: User) -> tuple[list[str], list[str]]:
+    """Build role and permission lists from RBAC relationships."""
+    roles = sorted({assignment.role.name for assignment in user.user_roles if assignment.role is not None})
+    permissions = sorted(
+        {
+            permission.permission_name
+            for assignment in user.user_roles
+            if assignment.role is not None
+            for permission in assignment.role.permissions
+        }
+    )
+    return roles, permissions
+
+
 def create_access_token(data: Dict, expires_delta: Optional[timedelta] = None) -> str:
-    """
-    Create a JWT access token
-    """
+    """Create a JWT access token."""
     to_encode = data.copy()
-    
+
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
         expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    
+
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
-    
-    return encoded_jwt
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+
 
 def decode_access_token(token: str) -> Dict:
-    """
-    Decode and verify a JWT access token
-    """
+    """Decode and verify a JWT access token."""
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-        return payload
-    except JWTError as e:
-        raise HTTPException(status_code=401, detail=f"Invalid token: {str(e)}")
+        return jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+    except JWTError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Invalid token: {exc}",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
 
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Security(security),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ) -> User:
-    """
-    Get the current authenticated user from JWT token
-    """
-    token = credentials.credentials
-    
+    """Get the current authenticated user from JWT token."""
+    payload = decode_access_token(credentials.credentials)
+    user_id = payload.get("sub")
+
+    if not user_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authentication credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
     try:
-        payload = decode_access_token(token)
-        user_id = payload.get("sub")
+        user_uuid = UUID(str(user_id))
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token subject",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
-        if user_id is None:
-            raise HTTPException(status_code=401, detail="Invalid authentication credentials")
-
-    except JWTError:
-        raise HTTPException(status_code=401, detail="Invalid authentication credentials")
-
-    # user_id may be stored as int or string (UUID); compare directly
-    user = db.query(User).filter(User.id == user_id).first()
-    
+    user = db.query(User).filter(User.id == user_uuid).first()
     if user is None:
-        raise HTTPException(status_code=404, detail="User not found")
-    
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
     return user
 
-def get_current_active_user(current_user: User = Depends(get_current_user)) -> User:
-    """
-    Get the current active user
-    """
-    return current_user
 
-def require_role(allowed_roles: list):
-    """
-    Decorator to require specific user roles
-    """
-    def role_checker(current_user: User = Depends(get_current_user)) -> User:
-        # Normalize allowed roles to strings (support enum or raw strings)
-        normalized = [r.value if hasattr(r, "value") else r for r in allowed_roles]
-        user_role = current_user.role.value if hasattr(current_user.role, "value") else current_user.role
-        if user_role not in normalized:
+def get_current_user_access(current_user: User = Depends(get_current_user)) -> Dict:
+    """Get current user plus resolved roles and permissions."""
+    roles, permissions = get_user_roles_and_permissions(current_user)
+    return {
+        "user": current_user,
+        "roles": roles,
+        "permissions": permissions,
+    }
+
+
+def require_roles(allowed_roles: list[str]):
+    """Dependency factory to protect endpoints by role names."""
+
+    def role_checker(user_access: Dict = Depends(get_current_user_access)) -> Dict:
+        current_roles = set(user_access["roles"])
+        if not current_roles.intersection(set(allowed_roles)):
             raise HTTPException(
-                status_code=403,
-                detail=f"Access denied. Required roles: {', '.join([str(r) for r in normalized])}"
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Access denied. Required roles: {', '.join(sorted(set(allowed_roles)))}",
             )
-        return current_user
+        return user_access
+
     return role_checker
 
-def is_admin(current_user: User = Depends(get_current_user)) -> User:
-    """
-    Check if the current user is an admin
-    """
-    user_role = current_user.role.value if hasattr(current_user.role, "value") else current_user.role
-    admin_value = UserRole.ADMIN.value if hasattr(UserRole.ADMIN, "value") else UserRole.ADMIN
-    if user_role != admin_value:
-        raise HTTPException(status_code=403, detail="Admin access required")
+
+def require_permissions(required_permissions: list[str]):
+    """Dependency factory to protect endpoints by permission names."""
+
+    def permission_checker(user_access: Dict = Depends(get_current_user_access)) -> Dict:
+        current_permissions = set(user_access["permissions"])
+        if not set(required_permissions).issubset(current_permissions):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=(
+                    "Missing required permissions: "
+                    f"{', '.join(sorted(set(required_permissions) - current_permissions))}"
+                ),
+            )
+        return user_access
+
+    return permission_checker
+
+
+def get_current_active_user(current_user: User = Depends(get_current_user)) -> User:
+    """Backward-compatible alias for protected dependencies."""
     return current_user
 
+
 def is_faculty_or_admin(current_user: User = Depends(get_current_user)) -> User:
-    """
-    Check if the current user is faculty or admin
-    """
-    if current_user.role not in [UserRole.FACULTY, UserRole.ADMIN]:
-        raise HTTPException(status_code=403, detail="Faculty or admin access required")
+    """Check if current user has faculty or admin role."""
+    roles, _ = get_user_roles_and_permissions(current_user)
+    if not any(role in ("faculty", "admin") for role in roles):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Faculty or admin access required",
+        )
     return current_user

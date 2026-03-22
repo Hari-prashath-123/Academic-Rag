@@ -4,6 +4,7 @@ Configuration module for the Academic RAG Assistant
 import os
 from pathlib import Path
 from typing import List
+from urllib.parse import quote_plus
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 
@@ -21,7 +22,12 @@ class Settings(BaseSettings):
     HOST: str = os.getenv("HOST", "0.0.0.0")
     
     # Database
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "")
+    DB_HOST: str = os.getenv("DB_HOST", "localhost")
+    DB_PORT: int = int(os.getenv("DB_PORT", "5432"))
+    DB_USER: str = os.getenv("DB_USER", "postgres")
+    DB_PASS: str = os.getenv("DB_PASS", "postgres")
+    DB_NAME: str = os.getenv("DB_NAME", "Academic-rag")
+    DATABASE_URL_RAW: str = os.getenv("DATABASE_URL", "")
     
     # JWT
     SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-change-this")
@@ -80,6 +86,17 @@ class Settings(BaseSettings):
     @property
     def ALLOWED_EXTENSIONS(self) -> List[str]:
         return [s.strip() for s in self.ALLOWED_EXTENSIONS_RAW.split(",") if s.strip()]
+
+    @property
+    def DATABASE_URL(self) -> str:
+        """Return explicit DATABASE_URL or build one from DB_* variables."""
+        if self.DATABASE_URL_RAW.strip():
+            return self.DATABASE_URL_RAW
+
+        user = quote_plus(self.DB_USER)
+        password = quote_plus(self.DB_PASS)
+        db_name = quote_plus(self.DB_NAME)
+        return f"postgresql+psycopg2://{user}:{password}@{self.DB_HOST}:{self.DB_PORT}/{db_name}"
 
 # Create settings instance
 settings = Settings()

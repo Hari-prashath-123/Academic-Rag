@@ -3,17 +3,40 @@ Main FastAPI application
 """
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.exceptions import RequestValidationError
 from contextlib import asynccontextmanager
+from sqlalchemy import text
 import time
 
 from config import settings
-from models import init_db
+from models import engine
 from utils.logger import log
 
 # Import routers
 from routes import auth, documents, rag, obe, qp
+
+
+def check_sqlalchemy_connection() -> None:
+    """Verify PostgreSQL connectivity using SQLAlchemy engine."""
+    with engine.connect() as connection:
+        connection.execute(text("SELECT 1"))
+
+
+def get_psycopg2_connection():
+    """Optional raw psycopg2 connection boilerplate."""
+    try:
+        import psycopg2
+    except ImportError:
+        return None
+
+    return psycopg2.connect(
+        host=settings.DB_HOST,
+        port=settings.DB_PORT,
+        user=settings.DB_USER,
+        password=settings.DB_PASS,
+        dbname=settings.DB_NAME,
+    )
 
 # Lifespan context manager for startup/shutdown events
 @asynccontextmanager
@@ -26,10 +49,25 @@ async def lifespan(app: FastAPI):
     log.info(f"Environment: {settings.APP_ENV}")
     log.info(f"Debug mode: {settings.DEBUG}")
     
-    # Initialize database
+    # Validate database connectivity (schema managed via migrations)
     try:
-        init_db()
-        log.info("Database initialized successfully")
+        # SQLAlchemy ORM connectivity check
+        check_sqlalchemy_connection()
+        log.info("PostgreSQL connection via SQLAlchemy is healthy")
+        log.info("Database schema initialization is managed by migrate.py")
+
+        # Optional raw psycopg2 connectivity check
+        raw_conn = get_psycopg2_connection()
+        if raw_conn:
+            try:
+                with raw_conn.cursor() as cursor:
+                    cursor.execute("SELECT 1")
+                    cursor.fetchone()
+                log.info("PostgreSQL connection via psycopg2 is healthy")
+            finally:
+                raw_conn.close()
+        else:
+            log.info("psycopg2 not installed; skipped raw SQL connection check")
     except Exception as e:
         log.error(f"Error initializing database: {e}")
     
@@ -120,14 +158,19 @@ async def general_exception_handler(request: Request, exc: Exception):
 # Root endpoint
 @app.get("/", tags=["Root"])
 async def root():
-    """
-    Root endpoint - API information
-    """
+    """Redirect backend root to login page."""
+    return RedirectResponse(url="/api/auth/login-page", status_code=status.HTTP_307_TEMPORARY_REDIRECT)
+
+
+@app.get("/api-info", tags=["Root"])
+async def api_info():
+    """API information endpoint."""
     return {
         "name": settings.APP_NAME,
         "version": "1.0.0",
         "status": "running",
         "docs": "/docs",
+        "backend_login_page": "/api/auth/login-page",
         "environment": settings.APP_ENV
     }
 
