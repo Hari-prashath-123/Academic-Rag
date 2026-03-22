@@ -22,9 +22,6 @@ class Settings(BaseSettings):
     
     # Database
     DATABASE_URL: str = os.getenv("DATABASE_URL", "")
-    SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")
-    SUPABASE_KEY: str = os.getenv("SUPABASE_KEY", "")
-    SUPABASE_SERVICE_KEY: str = os.getenv("SUPABASE_SERVICE_KEY", "")
     
     # JWT
     SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-change-this")
@@ -63,8 +60,8 @@ class Settings(BaseSettings):
     PASSING_THRESHOLD: int = int(os.getenv("PASSING_THRESHOLD", "40"))
     CO_ATTAINMENT_THRESHOLD: int = int(os.getenv("CO_ATTAINMENT_THRESHOLD", "50"))
     
-    # CORS
-    CORS_ORIGINS: List[str] = os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
+    # CORS (raw string, will be converted to list via validator)
+    CORS_ORIGINS_RAW: str = os.getenv("CORS_ORIGINS", "http://localhost:3000")
     
     # Logging
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
@@ -73,6 +70,12 @@ class Settings(BaseSettings):
     class Config:
         case_sensitive = True
         env_file = ".env"
+        extra = 'ignore'  # Ignore extra fields from environment variables
+
+    @property
+    def CORS_ORIGINS(self) -> List[str]:
+        """Convert comma-separated string to list of origins."""
+        return [s.strip() for s in self.CORS_ORIGINS_RAW.split(",") if s.strip()]
 
     @property
     def ALLOWED_EXTENSIONS(self) -> List[str]:

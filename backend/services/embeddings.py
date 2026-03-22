@@ -5,10 +5,10 @@ import os
 import pickle
 from typing import List, Dict, Any
 import numpy as np
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import FAISS
-from langchain.docstore.document import Document as LangchainDocument
+from langchain_openai import OpenAIEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores import FAISS
+from langchain_core.documents import Document as LangchainDocument
 from config import settings
 
 class EmbeddingService:

@@ -32,8 +32,8 @@ python -c "from models import init_db; init_db()"
 
 # Start server
 echo ""
-echo "Starting FastAPI server..."
+echo "Starting backend server..."
 echo "Server will be available at: http://localhost:8000"
 echo "Documentation at: http://localhost:8000/docs"
 echo ""
-uvicorn app:app --reload --host 0.0.0.0 --port 8000
+python manage.py runserver 0.0.0.0:8000

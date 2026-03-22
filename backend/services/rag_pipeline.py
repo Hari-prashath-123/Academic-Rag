@@ -2,10 +2,10 @@
 RAG pipeline service for retrieval-augmented generation
 """
 from typing import List, Dict, Any, Optional
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.prompts import PromptTemplate
-from langchain.schema import Document as LangchainDocument
+from langchain_core.documents import Document as LangchainDocument
 from services.embeddings import EmbeddingService
 from config import settings
 

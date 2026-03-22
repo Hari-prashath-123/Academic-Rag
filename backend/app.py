@@ -181,7 +181,7 @@ app.include_router(rag.router)
 app.include_router(obe.router)
 app.include_router(qp.router)
 
-# Run with: uvicorn app:app --reload --host 0.0.0.0 --port 8000
+# Run with: python manage.py runserver 0.0.0.0:8000
 if __name__ == "__main__":
     import uvicorn
     

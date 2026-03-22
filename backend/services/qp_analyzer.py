@@ -2,7 +2,7 @@
 Question paper analysis service using LLM
 """
 from typing import List, Dict, Any
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from sqlalchemy.orm import Session
 from models.document import Document
