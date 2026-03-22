@@ -19,63 +19,107 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { AuthRole, useAuth } from '@/context/auth-context'
 
-const navItems = [
+type NavItem = {
+  label: string
+  href: string
+  icon: any
+  roles: AuthRole[]
+}
+
+const navItems: NavItem[] = [
   {
     label: 'Dashboard',
     href: '/dashboard',
     icon: LayoutDashboard,
+    roles: ['admin', 'faculty', 'student'],
   },
   {
     label: 'AI Chat Assistant',
     href: '/chat',
     icon: MessageSquare,
+    roles: ['admin', 'faculty', 'student'],
   },
   {
     label: 'Document Library',
     href: '/documents',
     icon: FileText,
+    roles: ['admin', 'faculty', 'student'],
   },
   {
     label: 'Question Papers',
     href: '/questions',
     icon: HelpCircle,
+    roles: ['admin', 'faculty', 'student'],
   },
   {
     label: 'Marks & Assessments',
     href: '/assessments',
     icon: BarChart3,
+    roles: ['admin', 'faculty', 'student'],
   },
   {
-    label: 'CO & Bloom\'s Mapping',
+    label: 'Advisor Mapping',
     href: '/mapping',
     icon: Grid3x3,
+    roles: ['admin'],
   },
   {
     label: 'OBE Report Generator',
     href: '/reports',
     icon: BookOpen,
+    roles: ['admin', 'faculty', 'advisor'],
   },
   {
-    label: 'Study Material Suggestions',
+    label: 'Manage Courses',
+    href: '/courses',
+    icon: BookOpen,
+    roles: ['admin', 'faculty', 'advisor'],
+  },
+  {
+    label: 'Upload Materials',
     href: '/materials',
     icon: BookOpen,
+    roles: ['admin', 'faculty', 'advisor', 'student'],
   },
   {
     label: 'User Management',
     href: '/users',
     icon: Users,
+    roles: ['admin'],
+  },
+  {
+    label: 'My Students',
+    href: '/mapping',
+    icon: Users,
+    roles: ['faculty'],
+  },
+  {
+    label: 'My Courses',
+    href: '/materials',
+    icon: BookOpen,
+    roles: ['student'],
   },
   {
     label: 'Settings',
     href: '/settings',
     icon: Settings,
+    roles: ['admin', 'faculty', 'student'],
   },
 ]
 
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(true)
   const pathname = usePathname()
+  const { role, user } = useAuth()
+
+  const allowedNavItems = navItems.filter((item) => {
+    if (!role) {
+      return false
+    }
+    return item.roles.includes(role)
+  })
 
   return (
     <>
@@ -115,7 +159,7 @@ export function Sidebar() {
         </div>
 
         <nav className="flex-1 overflow-y-auto p-3 space-y-1">
-          {navItems.map((item) => {
+          {allowedNavItems.map((item) => {
             const Icon = item.icon
             const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
 
@@ -153,10 +197,10 @@ export function Sidebar() {
             {isOpen && (
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-medium text-sidebar-foreground truncate">
-                  User Name
+                  {user?.email ?? 'Guest'}
                 </p>
                 <p className="text-xs text-sidebar-foreground/50 truncate">
-                  Student
+                  {role ? role.charAt(0).toUpperCase() + role.slice(1) : 'Unknown'}
                 </p>
               </div>
             )}

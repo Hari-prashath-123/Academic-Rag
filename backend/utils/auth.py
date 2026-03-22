@@ -170,9 +170,26 @@ def get_current_active_user(current_user: User = Depends(get_current_user)) -> U
 def is_faculty_or_admin(current_user: User = Depends(get_current_user)) -> User:
     """Check if current user has faculty or admin role."""
     roles, _ = get_user_roles_and_permissions(current_user)
-    if not any(role in ("faculty", "admin") for role in roles):
+    if not any(role in ("faculty", "admin", "advisor") for role in roles):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Faculty or admin access required",
         )
     return current_user
+
+
+def get_current_admin_user(user_access: Dict = Depends(require_roles(["admin"]))) -> User:
+    """Dependency that allows only admin users."""
+    return user_access["user"]
+
+
+def get_current_faculty_user(user_access: Dict = Depends(require_roles(["faculty"]))) -> User:
+    """Dependency that allows only faculty users."""
+    return user_access["user"]
+
+
+def get_current_faculty_or_admin_user(
+    user_access: Dict = Depends(require_roles(["faculty", "admin", "advisor"]))
+) -> User:
+    """Dependency that allows faculty or admin or advisor users."""
+    return user_access["user"]

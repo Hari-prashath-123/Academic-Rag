@@ -36,7 +36,7 @@ def ensure_database_exists() -> None:
 
         print(f"Database '{db_name}' not found. Creating it...")
         connection.execute(text(f"CREATE DATABASE {_quoted_identifier(db_name)}"))
-        print(f"✅ Database created: {db_name}")
+        print(f"Database created: {db_name}")
 
 def run_migrations():
     """Run database migrations from migrations/ directory"""
@@ -83,21 +83,21 @@ def run_migrations():
 
                         # Idempotent re-run noise; continue processing.
                         if "already exists" in error_text_lower or "duplicate key" in error_text_lower:
-                            print(f"  ⚠️  {migration_file.name}: {e}")
+                            print(f"  WARN {migration_file.name}: {e}")
                         # Dependency not met yet (e.g., FK references table from later migration).
                         elif "undefinedtable" in error_text_lower or "relation" in error_text_lower and "does not exist" in error_text_lower:
-                            print(f"  ⏭️  Deferring {migration_file.name}: {e}")
+                            print(f"  SKIP {migration_file.name} for now: {e}")
                             file_completed = False
                             next_pending.append(migration_file)
                             connection.rollback()
                         else:
-                            print(f"  ❌ Error in {migration_file.name}:")
+                            print(f"  ERROR in {migration_file.name}:")
                             print(f"     {e}")
                             raise
 
                     if file_completed:
                         connection.commit()
-                        print(f"  ✅ {migration_file.name} completed")
+                        print(f"  OK {migration_file.name} completed")
                         progress_made = True
 
                 if not progress_made and next_pending:
@@ -112,7 +112,7 @@ def run_migrations():
                 unresolved = ", ".join(file.name for file in pending)
                 raise RuntimeError(f"Unapplied migrations remain: {unresolved}")
         
-        print("\n✅ All migrations completed successfully!")
+        print("\nAll migrations completed successfully!")
         return True
         
     except OperationalError as e:
@@ -122,12 +122,12 @@ def run_migrations():
             ensure_database_exists()
             print("Retrying migrations...\n")
             return run_migrations()
-        print(f"\n❌ Migration failed: {e}")
+        print(f"\nMigration failed: {e}")
         import traceback
         traceback.print_exc()
         return False
     except Exception as e:
-        print(f"\n❌ Migration failed: {e}")
+        print(f"\nMigration failed: {e}")
         import traceback
         traceback.print_exc()
         return False

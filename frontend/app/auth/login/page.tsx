@@ -7,12 +7,11 @@ import { Mail, Lock, LogIn } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import api from '@/lib/api'
 import { useAuth } from '@/context/auth-context'
 
 export default function LoginPage() {
   const router = useRouter()
-  const { refreshUser } = useAuth()
+  const { login } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -29,25 +28,18 @@ export default function LoginPage() {
 
     setIsLoading(true)
     try {
-      const response = await api.post('/api/auth/login', {
+      const role = await login({
         email: email.trim(),
         password,
       })
 
-      const token = response?.data?.access_token as string | undefined
-      if (!token) {
-        setError('Invalid login response from server.')
-        return
+      if (role === 'admin') {
+        router.push('/users')
+      } else if (role === 'faculty') {
+        router.push('/materials')
+      } else {
+        router.push('/dashboard')
       }
-
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('token', token)
-        const secureFlag = window.location.protocol === 'https:' ? '; Secure' : ''
-        document.cookie = `token=${token}; Path=/; SameSite=Strict${secureFlag}`
-      }
-
-      await refreshUser()
-      router.push('/dashboard')
     } catch (err: any) {
       const message = err?.response?.data?.detail || err?.message || 'Login failed.'
       setError(String(message))

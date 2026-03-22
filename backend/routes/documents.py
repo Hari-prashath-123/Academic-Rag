@@ -12,7 +12,7 @@ from models import get_db
 from models.user import User
 from models.document import Document, DocumentType, IndexingStatus
 from utils.schemas import DocumentResponse, DocumentList
-from utils.auth import get_current_active_user, is_faculty_or_admin
+from utils.auth import get_current_active_user, get_current_faculty_or_admin_user, is_faculty_or_admin
 from services.document_loader import DocumentLoader
 from services.embeddings import EmbeddingService
 from config import settings
@@ -78,7 +78,7 @@ async def upload_document(
     subject: str = Form(...),
     document_type: DocumentType = Form(...),
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_active_user)
+    current_user: User = Depends(get_current_faculty_or_admin_user)
 ):
     """
     Upload and process a document
@@ -88,7 +88,9 @@ async def upload_document(
     - **subject**: Subject/course name
     - **document_type**: Type of document (syllabus, question_paper, etc.)
     
-    Document will be processed asynchronously and indexed for RAG
+    Document will be processed asynchronously and indexed for RAG.
+
+    Access: faculty/admin only
     """
     # Validate file
     if not file.filename:

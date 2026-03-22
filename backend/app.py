@@ -14,7 +14,7 @@ from models import engine
 from utils.logger import log
 
 # Import routers
-from routes import auth, documents, rag, obe, qp
+from routes import auth, documents, rag, obe, qp, users, advisor_mapping, course_materials
 
 
 def check_sqlalchemy_connection() -> None:
@@ -223,6 +223,9 @@ app.include_router(documents.router)
 app.include_router(rag.router)
 app.include_router(obe.router)
 app.include_router(qp.router)
+app.include_router(users.router)
+app.include_router(advisor_mapping.router)
+app.include_router(course_materials.router)
 
 # Run with: uvicorn app:app --host 0.0.0.0 --port 8000 --reload
 if __name__ == "__main__":

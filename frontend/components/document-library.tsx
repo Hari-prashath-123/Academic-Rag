@@ -45,7 +45,7 @@ import {
 
 // will be loaded from backend
 // const documents = [
-const DEFAULT_DOCS: any[] = []
+const DEFAULT_DOCS: any[] = [
   {
     id: 1,
     name: 'DS_Syllabus_2024.pdf',

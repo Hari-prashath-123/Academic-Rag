@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import { TrendingUp, FileText, Zap, BookOpen } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useAuth } from '@/context/auth-context'
 
 const queriesData = [
   { month: 'Jan', queries: 120, documents: 89 },
@@ -23,15 +24,27 @@ const subjectData = [
 ]
 
 export function DashboardContent() {
+  const { role, user } = useAuth()
+
+  const welcomeName = user?.email ?? 'User'
+  const roleTitle = role ? role.charAt(0).toUpperCase() + role.slice(1) : 'User'
+
+  const quickActions =
+    role === 'admin'
+      ? ['Manage Users', 'Advisor Mapping', 'View All Reports']
+      : role === 'faculty'
+        ? ['Upload Materials', 'My Students', 'Generate Reports']
+        : ['My Courses', 'Assessments', 'AI Chat Assistant']
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl">
       {/* Page Header */}
       <div>
         <h1 className="text-3xl font-bold text-foreground mb-1">
-          Welcome Back, Administrator
+          Welcome Back, {welcomeName}
         </h1>
         <p className="text-muted-foreground">
-          Here's what's happening with your academic knowledge base today.
+          Role: {roleTitle}. Here is your academic activity overview.
         </p>
       </div>
 
@@ -44,7 +57,7 @@ export function DashboardContent() {
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <p className="text-sm font-medium text-muted-foreground">
-                  Total Documents Indexed
+                  {role === 'student' ? 'My Documents' : 'Total Documents Indexed'}
                 </p>
                 <p className="text-3xl font-bold text-foreground mt-2">
                   2,847
@@ -68,7 +81,7 @@ export function DashboardContent() {
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <p className="text-sm font-medium text-muted-foreground">
-                  Total Queries Asked
+                  {role === 'student' ? 'My Queries' : 'Total Queries Asked'}
                 </p>
                 <p className="text-3xl font-bold text-foreground mt-2">
                   15,892
@@ -92,7 +105,7 @@ export function DashboardContent() {
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <p className="text-sm font-medium text-muted-foreground">
-                  Courses Covered
+                  {role === 'faculty' ? 'My Students' : 'Courses Covered'}
                 </p>
                 <p className="text-3xl font-bold text-foreground mt-2">
                   24
@@ -116,7 +129,7 @@ export function DashboardContent() {
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <p className="text-sm font-medium text-muted-foreground">
-                  OBE Reports Generated
+                  {role === 'student' ? 'Assessments Attempted' : 'OBE Reports Generated'}
                 </p>
                 <p className="text-3xl font-bold text-foreground mt-2">
                   312
@@ -236,13 +249,13 @@ export function DashboardContent() {
       {/* Action Buttons */}
       <div className="flex flex-wrap gap-3 pt-4">
         <Button className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
-          Upload Document
+          {quickActions[0]}
         </Button>
         <Button variant="outline">
-          View All Reports
+          {quickActions[1]}
         </Button>
         <Button variant="outline">
-          Manage Users
+          {quickActions[2]}
         </Button>
       </div>
     </div>

@@ -31,11 +31,25 @@ class User(Base):
     marks = relationship("Mark", back_populates="student", foreign_keys="Mark.student_id")
     notes = relationship("Note", back_populates="author", cascade="all, delete-orphan")
     chat_messages = relationship("ChatHistory", back_populates="user", cascade="all, delete-orphan")
+    created_courses = relationship("Course", back_populates="created_by_user")
+    uploaded_course_materials = relationship("CourseMaterial", back_populates="uploader")
 
     # RBAC relationships.
     profile = relationship("Profile", back_populates="user", uselist=False, cascade="all, delete-orphan")
     user_roles = relationship("UserRole", back_populates="user", cascade="all, delete-orphan")
     roles = relationship("Role", secondary="user_roles", back_populates="users", viewonly=True)
+    advisor_mappings = relationship(
+        "AdvisorStudentMapping",
+        foreign_keys="AdvisorStudentMapping.advisor_id",
+        back_populates="advisor",
+        cascade="all, delete-orphan",
+    )
+    student_mappings = relationship(
+        "AdvisorStudentMapping",
+        foreign_keys="AdvisorStudentMapping.student_id",
+        back_populates="student",
+        cascade="all, delete-orphan",
+    )
 
     def __repr__(self):
         return f"<User(id={self.id}, email={self.email})>"

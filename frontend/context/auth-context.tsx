@@ -4,6 +4,8 @@ import React, { createContext, useState, useEffect, useContext, useCallback, use
 import { useRouter, usePathname } from 'next/navigation'
 import api from '../lib/api'
 
+export type AuthRole = 'admin' | 'faculty' | 'student' | 'advisor'
+
 type UserProfile = {
   first_name?: string | null
   last_name?: string | null
@@ -26,22 +28,63 @@ type LoginPayload = {
 
 type AuthContextValue = {
   user: AuthUser | null
+  role: AuthRole | null
   loading: boolean
-  login: (payload: LoginPayload) => Promise<void>
+  login: (payload: LoginPayload) => Promise<AuthRole | null>
   logout: () => void
   refreshUser: () => Promise<void>
+  hasRole: (allowedRoles: AuthRole | AuthRole[]) => boolean
 }
 
 const AuthContext = createContext<AuthContextValue>({
   user: null,
+  role: null,
   loading: true,
-  login: async () => {},
+  login: async () => null,
   logout: () => {},
   refreshUser: async () => {},
+  hasRole: () => false,
 })
+
+function parseJwtPayload(token: string): any | null {
+  try {
+    const base64Url = token.split('.')[1]
+    if (!base64Url) {
+      return null
+    }
+
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+    const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=')
+    const jsonPayload = atob(padded)
+    return JSON.parse(jsonPayload)
+  } catch {
+    return null
+  }
+}
+
+function resolveRole(roles: string[] | undefined): AuthRole | null {
+  if (!roles || roles.length === 0) {
+    return null
+  }
+
+  if (roles.includes('admin')) {
+    return 'admin'
+  }
+  if (roles.includes('faculty')) {
+    return 'faculty'
+  }
+  if (roles.includes('advisor')) {
+    return 'advisor'
+  }
+  if (roles.includes('student')) {
+    return 'student'
+  }
+  return null
+}
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<AuthUser | null>(null)
+  const [role, setRole] = useState<AuthRole | null>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
   const pathname = usePathname()
@@ -61,14 +104,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     document.cookie = 'token=; Path=/; Max-Age=0; SameSite=Strict'
   }
 
+  const setRoleFromToken = (token: string) => {
+    const payload = parseJwtPayload(token)
+    const tokenRoles = Array.isArray(payload?.roles) ? payload.roles : []
+    setRole(resolveRole(tokenRoles))
+  }
+
   const refreshUser = useCallback(async () => {
     setLoading(true)
     try {
       const res = await api.get('/api/auth/me')
-      setUser(res.data)
+      const profile = res.data as AuthUser
+      setUser(profile)
+      setRole(resolveRole(profile.roles))
     } catch {
       clearStoredToken()
       setUser(null)
+      setRole(null)
     } finally {
       setLoading(false)
     }
@@ -81,9 +133,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } else {
       setLoading(false)
     }
-  }, [])
+  }, [pathname, refreshUser])
 
-  const login = async ({ email, password }: LoginPayload) => {
+  const login = async ({ email, password }: LoginPayload): Promise<AuthRole | null> => {
     const response = await api.post('/api/auth/login', { email, password })
     const token = response?.data?.access_token
     if (!token) {
@@ -96,7 +148,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       document.cookie = `token=${token}; Path=/; SameSite=Strict${secureFlag}`
     }
 
+    setRoleFromToken(token)
+
     await refreshUser()
+    return resolveRole(Array.isArray(response?.data?.roles) ? response.data.roles : parseJwtPayload(token)?.roles)
   }
 
   const logout = () => {
@@ -104,14 +159,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       clearStoredToken()
     } finally {
       setUser(null)
+      setRole(null)
       router.push('/auth/login')
     }
   }
 
+  const hasRole = useCallback(
+    (allowedRoles: AuthRole | AuthRole[]) => {
+      if (!role) {
+        return false
+      }
+      const allowed = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles]
+      return allowed.includes(role)
+    },
+    [role]
+  )
+
   // Memoize context value to prevent unnecessary re-renders
   const contextValue = useMemo(
-    () => ({ user, loading, login, logout, refreshUser }),
-    [user, loading, login, logout, refreshUser]
+    () => ({ user, role, loading, login, logout, refreshUser, hasRole }),
+    [user, role, loading, login, logout, refreshUser, hasRole]
   )
 
   return (
