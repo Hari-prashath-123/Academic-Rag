@@ -96,7 +96,7 @@ export default function MaterialsPage() {
   }
 
   return (
-    <RoleGuard allowedRoles={['admin', 'faculty', 'advisor', 'student']}>
+    <RoleGuard allowedRoles={['admin', 'faculty', 'advisor']}>
       <div className="flex min-h-screen bg-background">
         <Sidebar />
         <main className="flex-1 flex flex-col">
@@ -149,6 +149,7 @@ export default function MaterialsPage() {
                   />
                   <input
                     type="file"
+                    accept="*/*"
                     className="rounded-md border border-border bg-background px-3 py-2"
                     onChange={(e) => setFile(e.target.files?.[0] || null)}
                   />

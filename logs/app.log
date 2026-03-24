@@ -311,3 +311,632 @@
 2026-03-22 11:11:14 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
 2026-03-22 11:11:14 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 401 - Time: 0.016s
 2026-03-22 11:12:48 | INFO     | app:lifespan:77 - Shutting down Academic RAG Assistant API
+2026-03-23 11:12:54 | INFO     | app:lifespan:48 - Starting Academic RAG Assistant API
+2026-03-23 11:12:54 | INFO     | app:lifespan:49 - Environment: development
+2026-03-23 11:12:54 | INFO     | app:lifespan:50 - Debug mode: True
+2026-03-23 11:12:54 | INFO     | app:lifespan:56 - PostgreSQL connection via SQLAlchemy is healthy
+2026-03-23 11:12:54 | INFO     | app:lifespan:57 - Database schema initialization is managed by migrate.py
+2026-03-23 11:12:54 | INFO     | app:lifespan:66 - PostgreSQL connection via psycopg2 is healthy
+2026-03-23 11:13:07 | INFO     | app:log_requests:107 - Incoming request: GET /api/timetable/swap-requests/
+2026-03-23 11:13:07 | INFO     | app:log_requests:107 - Incoming request: GET /api/timetable/swap-requests/
+2026-03-23 11:13:07 | INFO     | app:log_requests:116 - Completed: GET /api/timetable/swap-requests/ - Status: 404 - Time: 0.002s
+2026-03-23 11:13:07 | INFO     | app:log_requests:116 - Completed: GET /api/timetable/swap-requests/ - Status: 404 - Time: 0.006s
+2026-03-23 11:13:34 | INFO     | app:log_requests:107 - Incoming request: GET /health
+2026-03-23 11:13:34 | INFO     | app:log_requests:116 - Completed: GET /health - Status: 200 - Time: 0.003s
+2026-03-23 11:14:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/timetable/swap-requests/
+2026-03-23 11:14:06 | INFO     | app:log_requests:116 - Completed: GET /api/timetable/swap-requests/ - Status: 404 - Time: 0.002s
+2026-03-23 11:14:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/timetable/swap-requests/
+2026-03-23 11:14:06 | INFO     | app:log_requests:116 - Completed: GET /api/timetable/swap-requests/ - Status: 404 - Time: 0.005s
+2026-03-23 11:15:07 | INFO     | app:log_requests:107 - Incoming request: GET /api/timetable/swap-requests/
+2026-03-23 11:15:07 | INFO     | app:log_requests:107 - Incoming request: GET /api/timetable/swap-requests/
+2026-03-23 11:15:07 | INFO     | app:log_requests:116 - Completed: GET /api/timetable/swap-requests/ - Status: 404 - Time: 0.005s
+2026-03-23 11:15:07 | INFO     | app:log_requests:116 - Completed: GET /api/timetable/swap-requests/ - Status: 404 - Time: 0.002s
+2026-03-23 11:16:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/timetable/swap-requests/
+2026-03-23 11:16:06 | INFO     | app:log_requests:116 - Completed: GET /api/timetable/swap-requests/ - Status: 404 - Time: 0.002s
+2026-03-23 11:16:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/timetable/swap-requests/
+2026-03-23 11:16:06 | INFO     | app:log_requests:116 - Completed: GET /api/timetable/swap-requests/ - Status: 404 - Time: 0.004s
+2026-03-23 11:17:07 | INFO     | app:log_requests:107 - Incoming request: GET /api/timetable/swap-requests/
+2026-03-23 11:17:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:17:07 | INFO     | app:log_requests:116 - Completed: GET /api/timetable/swap-requests/ - Status: 404 - Time: 0.002s
+2026-03-23 11:17:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 11:18:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:18:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 11:18:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/timetable/swap-requests/
+2026-03-23 11:18:06 | INFO     | app:log_requests:116 - Completed: GET /api/timetable/swap-requests/ - Status: 404 - Time: 0.003s
+2026-03-23 11:19:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:19:07 | INFO     | app:log_requests:107 - Incoming request: GET /api/timetable/swap-requests/
+2026-03-23 11:19:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.005s
+2026-03-23 11:19:07 | INFO     | app:log_requests:116 - Completed: GET /api/timetable/swap-requests/ - Status: 404 - Time: 0.005s
+2026-03-23 11:20:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:20:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.003s
+2026-03-23 11:20:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/timetable/swap-requests/
+2026-03-23 11:20:06 | INFO     | app:log_requests:116 - Completed: GET /api/timetable/swap-requests/ - Status: 404 - Time: 0.004s
+2026-03-23 11:21:07 | INFO     | app:log_requests:107 - Incoming request: GET /api/timetable/swap-requests/
+2026-03-23 11:21:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:21:07 | INFO     | app:log_requests:116 - Completed: GET /api/timetable/swap-requests/ - Status: 404 - Time: 0.003s
+2026-03-23 11:21:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 11:21:44 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/auth/login
+2026-03-23 11:21:44 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/auth/login - Status: 200 - Time: 0.004s
+2026-03-23 11:21:44 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-23 11:21:44 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 200 - Time: 0.498s
+2026-03-23 11:21:44 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/auth/me
+2026-03-23 11:21:44 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/auth/me - Status: 200 - Time: 0.004s
+2026-03-23 11:21:44 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-23 11:21:44 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 200 - Time: 0.044s
+2026-03-23 11:21:45 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/users/
+2026-03-23 11:21:45 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/users/faculty
+2026-03-23 11:21:45 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/users/ - Status: 200 - Time: 0.008s
+2026-03-23 11:21:45 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/users/faculty - Status: 200 - Time: 0.020s
+2026-03-23 11:21:45 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/users/students
+2026-03-23 11:21:45 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-23 11:21:45 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/advisor-mappings/
+2026-03-23 11:21:45 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/users/
+2026-03-23 11:21:45 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/users/faculty
+2026-03-23 11:21:45 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/users/students
+2026-03-23 11:21:45 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/users/students - Status: 200 - Time: 0.024s
+2026-03-23 11:21:45 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/advisor-mappings/ - Status: 200 - Time: 0.022s
+2026-03-23 11:21:45 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/users/ - Status: 200 - Time: 0.017s
+2026-03-23 11:21:45 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/users/faculty - Status: 200 - Time: 0.015s
+2026-03-23 11:21:45 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/users/students - Status: 200 - Time: 0.017s
+2026-03-23 11:21:45 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/advisor-mappings/
+2026-03-23 11:21:46 | INFO     | app:log_requests:107 - Incoming request: GET /api/users/
+2026-03-23 11:21:46 | INFO     | app:log_requests:107 - Incoming request: GET /api/users/faculty
+2026-03-23 11:21:46 | INFO     | app:log_requests:107 - Incoming request: GET /api/users/students
+2026-03-23 11:21:46 | INFO     | app:log_requests:107 - Incoming request: GET /api/advisor-mappings/
+2026-03-23 11:21:46 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/advisor-mappings/ - Status: 200 - Time: 0.014s
+2026-03-23 11:21:46 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 200 - Time: 0.121s
+2026-03-23 11:21:46 | INFO     | app:log_requests:116 - Completed: GET /api/users/ - Status: 200 - Time: 0.356s
+2026-03-23 11:21:46 | INFO     | app:log_requests:107 - Incoming request: GET /api/users/
+2026-03-23 11:21:46 | INFO     | app:log_requests:116 - Completed: GET /api/users/students - Status: 200 - Time: 0.460s
+2026-03-23 11:21:46 | INFO     | app:log_requests:116 - Completed: GET /api/users/faculty - Status: 200 - Time: 0.463s
+2026-03-23 11:21:46 | INFO     | app:log_requests:107 - Incoming request: GET /api/users/students
+2026-03-23 11:21:46 | INFO     | app:log_requests:107 - Incoming request: GET /api/users/faculty
+2026-03-23 11:21:46 | INFO     | app:log_requests:116 - Completed: GET /api/advisor-mappings/ - Status: 200 - Time: 0.506s
+2026-03-23 11:21:46 | INFO     | app:log_requests:107 - Incoming request: GET /api/advisor-mappings/
+2026-03-23 11:21:46 | INFO     | app:log_requests:116 - Completed: GET /api/users/ - Status: 200 - Time: 0.259s
+2026-03-23 11:21:46 | INFO     | app:log_requests:116 - Completed: GET /api/users/students - Status: 200 - Time: 0.262s
+2026-03-23 11:21:46 | INFO     | app:log_requests:116 - Completed: GET /api/advisor-mappings/ - Status: 200 - Time: 0.209s
+2026-03-23 11:21:46 | INFO     | app:log_requests:116 - Completed: GET /api/users/faculty - Status: 200 - Time: 0.269s
+2026-03-23 11:22:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:22:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/timetable/swap-requests/
+2026-03-23 11:22:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.009s
+2026-03-23 11:22:06 | INFO     | app:log_requests:116 - Completed: GET /api/timetable/swap-requests/ - Status: 404 - Time: 0.007s
+2026-03-23 11:22:37 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /rag/history
+2026-03-23 11:22:37 | INFO     | app:log_requests:116 - Completed: OPTIONS /rag/history - Status: 200 - Time: 0.001s
+2026-03-23 11:22:37 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /rag/history
+2026-03-23 11:22:37 | INFO     | app:log_requests:107 - Incoming request: GET /rag/history
+2026-03-23 11:22:37 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-23 11:22:37 | INFO     | app:log_requests:116 - Completed: OPTIONS /rag/history - Status: 200 - Time: 0.011s
+2026-03-23 11:22:37 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 200 - Time: 0.078s
+2026-03-23 11:22:39 | INFO     | app:log_requests:107 - Incoming request: GET /rag/history
+2026-03-23 11:22:42 | INFO     | app:log_requests:107 - Incoming request: GET /api/users/faculty
+2026-03-23 11:22:42 | INFO     | app:log_requests:107 - Incoming request: GET /api/users/students
+2026-03-23 11:22:42 | INFO     | app:log_requests:107 - Incoming request: GET /api/advisor-mappings/
+2026-03-23 11:22:42 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-23 11:22:42 | INFO     | app:log_requests:116 - Completed: GET /api/users/faculty - Status: 200 - Time: 0.164s
+2026-03-23 11:22:42 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 200 - Time: 0.148s
+2026-03-23 11:22:42 | INFO     | app:log_requests:107 - Incoming request: GET /api/users/faculty
+2026-03-23 11:22:42 | INFO     | app:log_requests:116 - Completed: GET /api/users/students - Status: 200 - Time: 0.212s
+2026-03-23 11:22:42 | INFO     | app:log_requests:116 - Completed: GET /api/advisor-mappings/ - Status: 200 - Time: 0.222s
+2026-03-23 11:22:42 | INFO     | app:log_requests:107 - Incoming request: GET /api/users/students
+2026-03-23 11:22:42 | INFO     | app:log_requests:107 - Incoming request: GET /api/advisor-mappings/
+2026-03-23 11:22:42 | INFO     | app:log_requests:116 - Completed: GET /api/users/faculty - Status: 200 - Time: 0.147s
+2026-03-23 11:22:42 | INFO     | app:log_requests:116 - Completed: GET /api/advisor-mappings/ - Status: 200 - Time: 0.182s
+2026-03-23 11:22:42 | INFO     | app:log_requests:116 - Completed: GET /api/users/students - Status: 200 - Time: 0.201s
+2026-03-23 11:23:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:23:07 | INFO     | app:log_requests:107 - Incoming request: GET /api/timetable/swap-requests/
+2026-03-23 11:23:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.006s
+2026-03-23 11:23:07 | INFO     | app:log_requests:116 - Completed: GET /api/timetable/swap-requests/ - Status: 404 - Time: 0.007s
+2026-03-23 11:24:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:24:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/timetable/swap-requests/
+2026-03-23 11:24:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.005s
+2026-03-23 11:24:06 | INFO     | app:log_requests:116 - Completed: GET /api/timetable/swap-requests/ - Status: 404 - Time: 0.007s
+2026-03-23 11:25:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:25:07 | INFO     | app:log_requests:107 - Incoming request: GET /api/timetable/swap-requests/
+2026-03-23 11:25:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.005s
+2026-03-23 11:25:07 | INFO     | app:log_requests:116 - Completed: GET /api/timetable/swap-requests/ - Status: 404 - Time: 0.007s
+2026-03-23 11:26:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:26:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/timetable/swap-requests/
+2026-03-23 11:26:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.005s
+2026-03-23 11:26:06 | INFO     | app:log_requests:116 - Completed: GET /api/timetable/swap-requests/ - Status: 404 - Time: 0.007s
+2026-03-23 11:27:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:27:07 | INFO     | app:log_requests:107 - Incoming request: GET /api/timetable/swap-requests/
+2026-03-23 11:27:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.004s
+2026-03-23 11:27:07 | INFO     | app:log_requests:116 - Completed: GET /api/timetable/swap-requests/ - Status: 404 - Time: 0.004s
+2026-03-23 11:28:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:28:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.002s
+2026-03-23 11:28:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:28:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.003s
+2026-03-23 11:29:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:29:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:29:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.009s
+2026-03-23 11:29:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.006s
+2026-03-23 11:30:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:30:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:30:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.004s
+2026-03-23 11:30:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.004s
+2026-03-23 11:31:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:31:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:31:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.004s
+2026-03-23 11:31:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 11:31:22 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/auth/login
+2026-03-23 11:31:22 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/auth/login - Status: 200 - Time: 0.002s
+2026-03-23 11:31:22 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-23 11:31:22 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 200 - Time: 0.308s
+2026-03-23 11:31:22 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:22 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.014s
+2026-03-23 11:31:22 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:22 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.000s
+2026-03-23 11:31:22 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:22 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.000s
+2026-03-23 11:31:22 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:22 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.001s
+2026-03-23 11:31:22 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:22 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.005s
+2026-03-23 11:31:22 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:22 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.007s
+2026-03-23 11:31:22 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:22 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.003s
+2026-03-23 11:31:22 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:22 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.005s
+2026-03-23 11:31:22 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:22 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.010s
+2026-03-23 11:31:22 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:22 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.000s
+2026-03-23 11:31:25 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:25 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.004s
+2026-03-23 11:31:25 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:25 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.005s
+2026-03-23 11:31:25 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:25 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.003s
+2026-03-23 11:31:25 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:25 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.002s
+2026-03-23 11:31:25 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:25 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.001s
+2026-03-23 11:31:25 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:25 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.003s
+2026-03-23 11:31:25 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:25 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.004s
+2026-03-23 11:31:25 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:25 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.003s
+2026-03-23 11:31:25 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:25 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.004s
+2026-03-23 11:31:25 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-23 11:31:25 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.002s
+2026-03-23 11:32:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:32:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:32:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.004s
+2026-03-23 11:32:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 11:33:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:33:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:33:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.003s
+2026-03-23 11:33:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.006s
+2026-03-23 11:34:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:34:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.001s
+2026-03-23 11:34:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:34:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.002s
+2026-03-23 11:35:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:35:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:35:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.004s
+2026-03-23 11:35:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.004s
+2026-03-23 11:36:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:36:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:36:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.004s
+2026-03-23 11:36:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.004s
+2026-03-23 11:37:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:37:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 11:37:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:37:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 11:38:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:38:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:38:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.005s
+2026-03-23 11:38:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.003s
+2026-03-23 11:39:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:39:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:39:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.012s
+2026-03-23 11:39:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.011s
+2026-03-23 11:40:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:40:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.001s
+2026-03-23 11:40:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:40:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.003s
+2026-03-23 11:41:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:41:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.002s
+2026-03-23 11:41:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:41:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.002s
+2026-03-23 11:42:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:42:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:42:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.003s
+2026-03-23 11:42:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.005s
+2026-03-23 11:43:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:43:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.002s
+2026-03-23 11:43:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:43:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 11:44:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:44:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:44:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.004s
+2026-03-23 11:44:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.006s
+2026-03-23 11:45:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:45:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:45:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.006s
+2026-03-23 11:45:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.004s
+2026-03-23 11:46:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:46:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:46:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 11:46:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 11:47:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:47:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 11:47:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:47:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.005s
+2026-03-23 11:48:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:48:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:48:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 11:48:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 11:49:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:49:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:49:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.005s
+2026-03-23 11:49:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.006s
+2026-03-23 11:50:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:50:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:50:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.003s
+2026-03-23 11:50:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.005s
+2026-03-23 11:51:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:51:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:51:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.006s
+2026-03-23 11:51:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.007s
+2026-03-23 11:52:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:52:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:52:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.006s
+2026-03-23 11:52:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.007s
+2026-03-23 11:53:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:53:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.002s
+2026-03-23 11:53:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:53:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.006s
+2026-03-23 11:54:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:54:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:54:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.003s
+2026-03-23 11:54:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.006s
+2026-03-23 11:55:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:55:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.002s
+2026-03-23 11:55:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:55:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.004s
+2026-03-23 11:56:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:56:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:56:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 11:56:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 11:57:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:57:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:57:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.008s
+2026-03-23 11:57:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.012s
+2026-03-23 11:58:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:58:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:58:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.013s
+2026-03-23 11:58:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.006s
+2026-03-23 11:59:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:59:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.003s
+2026-03-23 11:59:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 11:59:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.003s
+2026-03-23 12:00:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:00:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:00:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 12:00:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 12:01:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:01:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.004s
+2026-03-23 12:01:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:01:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.001s
+2026-03-23 12:02:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:02:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:02:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.004s
+2026-03-23 12:02:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 12:03:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:03:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:03:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.002s
+2026-03-23 12:03:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.003s
+2026-03-23 12:04:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:04:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.002s
+2026-03-23 12:04:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:04:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.003s
+2026-03-23 12:05:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:05:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:05:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.003s
+2026-03-23 12:05:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.004s
+2026-03-23 12:06:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:06:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 12:06:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:06:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 12:07:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:07:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 12:07:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:07:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 12:08:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:08:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:08:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 12:08:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 12:09:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:09:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:09:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.001s
+2026-03-23 12:09:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.002s
+2026-03-23 12:10:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:10:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:10:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 12:10:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 12:11:16 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:11:16 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 12:11:16 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:11:16 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.002s
+2026-03-23 12:12:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:12:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.007s
+2026-03-23 12:12:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:12:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 12:20:09 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:20:09 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.001s
+2026-03-23 12:20:09 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:20:09 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.002s
+2026-03-23 12:44:27 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:44:27 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.002s
+2026-03-23 12:44:27 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:44:27 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.002s
+2026-03-23 12:45:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:45:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.001s
+2026-03-23 12:45:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:45:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.001s
+2026-03-23 12:45:13 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:45:13 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 12:45:42 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:45:42 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 12:46:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:46:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.001s
+2026-03-23 12:46:44 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:46:44 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 12:47:06 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:47:06 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 12:47:36 | INFO     | app:log_requests:107 - Incoming request: GET /obe/co-attainment
+2026-03-23 12:47:36 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-23 12:47:36 | INFO     | app:log_requests:116 - Completed: GET /obe/co-attainment - Status: 405 - Time: 0.016s
+2026-03-23 12:47:36 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 401 - Time: 0.010s
+2026-03-23 12:47:42 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/auth/login
+2026-03-23 12:47:42 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/auth/login - Status: 200 - Time: 0.000s
+2026-03-23 12:47:42 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-23 12:47:43 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 200 - Time: 0.239s
+2026-03-23 12:47:43 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/auth/me
+2026-03-23 12:47:43 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/auth/me - Status: 200 - Time: 0.000s
+2026-03-23 12:47:43 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-23 12:47:43 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 200 - Time: 0.031s
+2026-03-23 12:47:43 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-23 12:47:43 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 200 - Time: 0.048s
+2026-03-23 12:47:45 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:47:45 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 12:47:47 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /rag/history
+2026-03-23 12:47:47 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /rag/history
+2026-03-23 12:47:47 | INFO     | app:log_requests:116 - Completed: OPTIONS /rag/history - Status: 200 - Time: 0.003s
+2026-03-23 12:47:47 | INFO     | app:log_requests:116 - Completed: OPTIONS /rag/history - Status: 200 - Time: 0.002s
+2026-03-23 12:47:47 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-23 12:47:47 | INFO     | app:log_requests:107 - Incoming request: GET /rag/history
+2026-03-23 12:47:47 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 200 - Time: 0.079s
+2026-03-23 12:47:47 | INFO     | app:log_requests:107 - Incoming request: GET /rag/history
+2026-03-23 12:47:51 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/course-materials/courses
+2026-03-23 12:47:51 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/course-materials/courses - Status: 200 - Time: 0.003s
+2026-03-23 12:47:51 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-23 12:47:51 | INFO     | app:log_requests:107 - Incoming request: GET /rag/history
+2026-03-23 12:47:51 | INFO     | app:log_requests:107 - Incoming request: GET /api/course-materials/courses
+2026-03-23 12:47:51 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/course-materials/courses
+2026-03-23 12:47:51 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/course-materials/courses - Status: 200 - Time: 0.004s
+2026-03-23 12:47:51 | INFO     | app:log_requests:116 - Completed: GET /api/course-materials/courses - Status: 200 - Time: 0.172s
+2026-03-23 12:47:51 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 200 - Time: 0.195s
+2026-03-23 12:47:51 | INFO     | app:log_requests:107 - Incoming request: GET /api/course-materials/courses
+2026-03-23 12:47:51 | INFO     | app:log_requests:107 - Incoming request: GET /rag/history
+2026-03-23 12:47:51 | INFO     | app:log_requests:116 - Completed: GET /api/course-materials/courses - Status: 200 - Time: 0.033s
+2026-03-23 12:47:51 | INFO     | app:log_requests:107 - Incoming request: GET /rag/history
+2026-03-23 12:47:51 | INFO     | app:log_requests:107 - Incoming request: GET /rag/history
+2026-03-23 12:47:59 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/course-materials/
+2026-03-23 12:47:59 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/course-materials/ - Status: 200 - Time: 0.002s
+2026-03-23 12:47:59 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/course-materials/
+2026-03-23 12:47:59 | INFO     | app:log_requests:107 - Incoming request: GET /api/course-materials/
+2026-03-23 12:47:59 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/course-materials/ - Status: 200 - Time: 0.007s
+2026-03-23 12:47:59 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-23 12:47:59 | INFO     | app:log_requests:107 - Incoming request: GET /api/course-materials/courses
+2026-03-23 12:47:59 | INFO     | app:log_requests:116 - Completed: GET /api/course-materials/ - Status: 200 - Time: 0.056s
+2026-03-23 12:47:59 | INFO     | app:log_requests:116 - Completed: GET /api/course-materials/courses - Status: 200 - Time: 0.071s
+2026-03-23 12:47:59 | INFO     | app:log_requests:107 - Incoming request: GET /api/course-materials/
+2026-03-23 12:47:59 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 200 - Time: 0.076s
+2026-03-23 12:47:59 | INFO     | app:log_requests:107 - Incoming request: GET /api/course-materials/courses
+2026-03-23 12:47:59 | INFO     | app:log_requests:116 - Completed: GET /api/course-materials/ - Status: 200 - Time: 0.053s
+2026-03-23 12:47:59 | INFO     | app:log_requests:116 - Completed: GET /api/course-materials/courses - Status: 200 - Time: 0.046s
+2026-03-23 12:48:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:48:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.000s
+2026-03-23 12:48:24 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:48:24 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.004s
+2026-03-23 12:48:29 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/timetable/swap-requests/
+2026-03-23 12:48:29 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/timetable/swap-requests/ - Status: 400 - Time: 0.001s
+2026-03-23 12:48:38 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/accounts/me/
+2026-03-23 12:48:38 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/accounts/me/
+2026-03-23 12:48:38 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/accounts/me/ - Status: 400 - Time: 0.001s
+2026-03-23 12:48:38 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/accounts/me/ - Status: 400 - Time: 0.000s
+2026-03-23 12:48:38 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/accounts/me/
+2026-03-23 12:48:38 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/accounts/me/
+2026-03-23 12:48:38 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/accounts/me/ - Status: 400 - Time: 0.000s
+2026-03-23 12:48:38 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/accounts/me/ - Status: 400 - Time: 0.003s
+2026-03-23 13:16:28 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/accounts/me/
+2026-03-23 13:16:28 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/accounts/me/
+2026-03-23 13:16:28 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/accounts/me/ - Status: 400 - Time: 0.004s
+2026-03-23 13:16:28 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/accounts/me/ - Status: 400 - Time: 0.006s
+2026-03-23 13:16:28 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/accounts/me/
+2026-03-23 13:16:28 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/accounts/me/
+2026-03-23 13:16:28 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/accounts/me/ - Status: 400 - Time: 0.002s
+2026-03-23 13:16:28 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/accounts/me/ - Status: 400 - Time: 0.003s
+2026-03-23 13:33:16 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/accounts/token/
+2026-03-23 13:33:16 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/accounts/token/ - Status: 400 - Time: 0.003s
+2026-03-23 13:33:51 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/accounts/token/
+2026-03-23 13:33:51 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/accounts/token/ - Status: 400 - Time: 0.001s
+2026-03-23 13:34:07 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/accounts/token/
+2026-03-23 13:34:07 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/accounts/token/ - Status: 400 - Time: 0.002s
+2026-03-23 13:34:08 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/accounts/token/
+2026-03-23 13:34:08 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/accounts/token/ - Status: 400 - Time: 0.003s
+2026-03-23 13:34:09 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/accounts/token/
+2026-03-23 13:34:09 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/accounts/token/ - Status: 400 - Time: 0.002s
+2026-03-23 13:34:16 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/accounts/token/
+2026-03-23 13:34:16 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/accounts/token/ - Status: 400 - Time: 0.001s
+2026-03-23 13:34:37 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/accounts/token/
+2026-03-23 13:34:37 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/accounts/token/ - Status: 400 - Time: 0.002s
+2026-03-23 13:34:38 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/accounts/token/
+2026-03-23 13:34:38 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/accounts/token/ - Status: 400 - Time: 0.001s
+2026-03-24 20:14:15 | INFO     | app:lifespan:48 - Starting Academic RAG Assistant API
+2026-03-24 20:14:15 | INFO     | app:lifespan:49 - Environment: development
+2026-03-24 20:14:15 | INFO     | app:lifespan:50 - Debug mode: True
+2026-03-24 20:14:15 | INFO     | app:lifespan:56 - PostgreSQL connection via SQLAlchemy is healthy
+2026-03-24 20:14:15 | INFO     | app:lifespan:57 - Database schema initialization is managed by migrate.py
+2026-03-24 20:14:15 | INFO     | app:lifespan:66 - PostgreSQL connection via psycopg2 is healthy
+2026-03-24 20:14:28 | INFO     | app:lifespan:48 - Starting Academic RAG Assistant API
+2026-03-24 20:14:28 | INFO     | app:lifespan:49 - Environment: development
+2026-03-24 20:14:28 | INFO     | app:lifespan:50 - Debug mode: True
+2026-03-24 20:14:28 | INFO     | app:lifespan:56 - PostgreSQL connection via SQLAlchemy is healthy
+2026-03-24 20:14:28 | INFO     | app:lifespan:57 - Database schema initialization is managed by migrate.py
+2026-03-24 20:14:28 | INFO     | app:lifespan:66 - PostgreSQL connection via psycopg2 is healthy
+2026-03-24 20:15:02 | INFO     | app:lifespan:48 - Starting Academic RAG Assistant API
+2026-03-24 20:15:02 | INFO     | app:lifespan:49 - Environment: development
+2026-03-24 20:15:02 | INFO     | app:lifespan:50 - Debug mode: True
+2026-03-24 20:15:02 | INFO     | app:lifespan:56 - PostgreSQL connection via SQLAlchemy is healthy
+2026-03-24 20:15:02 | INFO     | app:lifespan:57 - Database schema initialization is managed by migrate.py
+2026-03-24 20:15:02 | INFO     | app:lifespan:66 - PostgreSQL connection via psycopg2 is healthy
+2026-03-24 20:22:02 | INFO     | app:lifespan:77 - Shutting down Academic RAG Assistant API
+2026-03-24 20:22:31 | INFO     | app:lifespan:48 - Starting Academic RAG Assistant API
+2026-03-24 20:22:31 | INFO     | app:lifespan:49 - Environment: development
+2026-03-24 20:22:31 | INFO     | app:lifespan:50 - Debug mode: True
+2026-03-24 20:22:31 | INFO     | app:lifespan:56 - PostgreSQL connection via SQLAlchemy is healthy
+2026-03-24 20:22:31 | INFO     | app:lifespan:57 - Database schema initialization is managed by migrate.py
+2026-03-24 20:22:31 | INFO     | app:lifespan:66 - PostgreSQL connection via psycopg2 is healthy
+2026-03-24 20:22:31 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:31 | INFO     | app:log_requests:107 - Incoming request: GET /rag/history
+2026-03-24 20:22:31 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.000s
+2026-03-24 20:22:31 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:31 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.000s
+2026-03-24 20:22:31 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:32 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.063s
+2026-03-24 20:22:32 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:32 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.014s
+2026-03-24 20:22:32 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:32 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.002s
+2026-03-24 20:22:32 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:32 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.003s
+2026-03-24 20:22:32 | INFO     | app:log_requests:107 - Incoming request: GET /rag/history
+2026-03-24 20:22:32 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:32 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.002s
+2026-03-24 20:22:32 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:32 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.000s
+2026-03-24 20:22:32 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:32 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.002s
+2026-03-24 20:22:32 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:32 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.003s
+2026-03-24 20:22:41 | INFO     | app:log_requests:107 - Incoming request: GET /rag/history
+2026-03-24 20:22:41 | INFO     | app:log_requests:107 - Incoming request: GET /api/course-materials/courses
+2026-03-24 20:22:41 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:41 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.005s
+2026-03-24 20:22:41 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:41 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.003s
+2026-03-24 20:22:41 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:41 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.003s
+2026-03-24 20:22:41 | INFO     | app:log_requests:107 - Incoming request: GET /rag/history
+2026-03-24 20:22:41 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:41 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.003s
+2026-03-24 20:22:41 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:41 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.000s
+2026-03-24 20:22:41 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:41 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.000s
+2026-03-24 20:22:41 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:41 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.009s
+2026-03-24 20:22:41 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:41 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.000s
+2026-03-24 20:22:41 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:41 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.000s
+2026-03-24 20:22:41 | INFO     | app:log_requests:116 - Completed: GET /api/course-materials/courses - Status: 200 - Time: 0.175s
+2026-03-24 20:22:41 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:22:41 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.000s
+2026-03-24 20:22:41 | INFO     | app:log_requests:107 - Incoming request: GET /api/course-materials/courses
+2026-03-24 20:22:41 | INFO     | app:log_requests:116 - Completed: GET /api/course-materials/courses - Status: 200 - Time: 0.061s
+2026-03-24 20:22:41 | INFO     | app:log_requests:107 - Incoming request: GET /rag/history
+2026-03-24 20:22:41 | INFO     | app:log_requests:107 - Incoming request: GET /rag/history
+2026-03-24 20:23:45 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:23:45 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.002s
+2026-03-24 20:23:45 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:23:45 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.002s
+2026-03-24 20:23:45 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:23:45 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.000s
+2026-03-24 20:23:45 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:23:45 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.000s
+2026-03-24 20:23:45 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:23:45 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.000s
+2026-03-24 20:23:45 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:23:45 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.000s
+2026-03-24 20:23:45 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:23:45 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.001s
+2026-03-24 20:23:45 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:23:45 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.001s
+2026-03-24 20:23:45 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:23:45 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.001s
+2026-03-24 20:23:45 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:23:45 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.002s
+2026-03-24 20:24:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/course-materials/courses
+2026-03-24 20:24:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/course-materials/
+2026-03-24 20:24:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:24:06 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.005s
+2026-03-24 20:24:06 | INFO     | app:log_requests:116 - Completed: GET /api/course-materials/courses - Status: 200 - Time: 0.031s
+2026-03-24 20:24:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:24:06 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.001s
+2026-03-24 20:24:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/course-materials/courses
+2026-03-24 20:24:06 | INFO     | app:log_requests:116 - Completed: GET /api/course-materials/ - Status: 200 - Time: 0.231s
+2026-03-24 20:24:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:24:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/course-materials/
+2026-03-24 20:24:06 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.009s
+2026-03-24 20:24:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:24:06 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.006s
+2026-03-24 20:24:06 | INFO     | app:log_requests:116 - Completed: GET /api/course-materials/courses - Status: 200 - Time: 0.065s
+2026-03-24 20:24:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:24:06 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.001s
+2026-03-24 20:24:06 | INFO     | app:log_requests:116 - Completed: GET /api/course-materials/ - Status: 200 - Time: 0.069s
+2026-03-24 20:24:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:24:06 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.002s
+2026-03-24 20:24:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:24:06 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.002s
+2026-03-24 20:24:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:24:06 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.001s
+2026-03-24 20:24:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:24:06 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.000s
+2026-03-24 20:24:06 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me/
+2026-03-24 20:24:06 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me/ - Status: 307 - Time: 0.001s
+2026-03-24 20:25:12 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-24 20:25:12 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 200 - Time: 0.031s
+2026-03-24 20:25:17 | INFO     | app:log_requests:107 - Incoming request: GET /obe/co-attainment
+2026-03-24 20:25:17 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-24 20:25:17 | INFO     | app:log_requests:116 - Completed: GET /obe/co-attainment - Status: 405 - Time: 0.008s
+2026-03-24 20:25:17 | INFO     | app:log_requests:107 - Incoming request: GET /obe/co-attainment
+2026-03-24 20:25:17 | INFO     | app:log_requests:116 - Completed: GET /obe/co-attainment - Status: 405 - Time: 0.001s
+2026-03-24 20:25:17 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 200 - Time: 0.029s
+2026-03-24 20:25:28 | INFO     | app:log_requests:107 - Incoming request: GET /api/course-materials/courses
+2026-03-24 20:25:28 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-24 20:25:28 | INFO     | app:log_requests:116 - Completed: GET /api/course-materials/courses - Status: 200 - Time: 0.040s
+2026-03-24 20:25:28 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 200 - Time: 0.040s
+2026-03-24 20:25:28 | INFO     | app:log_requests:107 - Incoming request: GET /api/course-materials/courses
+2026-03-24 20:25:28 | INFO     | app:log_requests:116 - Completed: GET /api/course-materials/courses - Status: 200 - Time: 0.028s
+2026-03-24 20:25:32 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/advisor-mappings/advisor/79443123-3bc8-4279-a9a3-83cfa7a55c06/students
+2026-03-24 20:25:32 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/advisor-mappings/advisor/79443123-3bc8-4279-a9a3-83cfa7a55c06/students
+2026-03-24 20:25:32 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/advisor-mappings/advisor/79443123-3bc8-4279-a9a3-83cfa7a55c06/students - Status: 200 - Time: 0.003s
+2026-03-24 20:25:32 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/advisor-mappings/advisor/79443123-3bc8-4279-a9a3-83cfa7a55c06/students - Status: 200 - Time: 0.002s
+2026-03-24 20:25:32 | INFO     | app:log_requests:107 - Incoming request: GET /api/advisor-mappings/advisor/79443123-3bc8-4279-a9a3-83cfa7a55c06/students
+2026-03-24 20:25:32 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-24 20:25:32 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 200 - Time: 0.037s
+2026-03-24 20:25:32 | INFO     | app:log_requests:116 - Completed: GET /api/advisor-mappings/advisor/79443123-3bc8-4279-a9a3-83cfa7a55c06/students - Status: 200 - Time: 0.053s
+2026-03-24 20:25:32 | INFO     | app:log_requests:107 - Incoming request: GET /api/advisor-mappings/advisor/79443123-3bc8-4279-a9a3-83cfa7a55c06/students
+2026-03-24 20:25:32 | INFO     | app:log_requests:116 - Completed: GET /api/advisor-mappings/advisor/79443123-3bc8-4279-a9a3-83cfa7a55c06/students - Status: 200 - Time: 0.026s
+2026-03-24 20:25:34 | INFO     | app:log_requests:107 - Incoming request: GET /api/course-materials/courses
+2026-03-24 20:25:34 | INFO     | app:log_requests:107 - Incoming request: GET /api/auth/me
+2026-03-24 20:25:34 | INFO     | app:log_requests:107 - Incoming request: GET /api/course-materials/
+2026-03-24 20:25:34 | INFO     | app:log_requests:116 - Completed: GET /api/course-materials/ - Status: 200 - Time: 0.037s
+2026-03-24 20:25:34 | INFO     | app:log_requests:116 - Completed: GET /api/auth/me - Status: 200 - Time: 0.044s
+2026-03-24 20:25:34 | INFO     | app:log_requests:107 - Incoming request: GET /api/course-materials/
+2026-03-24 20:25:34 | INFO     | app:log_requests:116 - Completed: GET /api/course-materials/ - Status: 200 - Time: 0.019s
+2026-03-24 20:25:34 | INFO     | app:log_requests:116 - Completed: GET /api/course-materials/courses - Status: 200 - Time: 0.101s
+2026-03-24 20:25:34 | INFO     | app:log_requests:107 - Incoming request: GET /api/course-materials/courses
+2026-03-24 20:25:34 | INFO     | app:log_requests:116 - Completed: GET /api/course-materials/courses - Status: 200 - Time: 0.023s
+2026-03-24 20:26:25 | INFO     | app:log_requests:107 - Incoming request: OPTIONS /api/auth/login
+2026-03-24 20:26:25 | INFO     | app:log_requests:116 - Completed: OPTIONS /api/auth/login - Status: 200 - Time: 0.004s
+2026-03-24 20:26:25 | INFO     | app:log_requests:107 - Incoming request: POST /api/auth/login
+2026-03-24 20:26:25 | INFO     | app:log_requests:116 - Completed: POST /api/auth/login - Status: 401 - Time: 0.011s

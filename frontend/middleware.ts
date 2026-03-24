@@ -11,7 +11,11 @@ function decodeRolesFromJwt(token: string): string[] {
     const base64 = payloadPart.replace(/-/g, '+').replace(/_/g, '/')
     const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=')
     const payload = JSON.parse(atob(padded))
-    return Array.isArray(payload.roles) ? payload.roles : []
+    return Array.isArray(payload.roles)
+      ? payload.roles
+          .filter((roleName: unknown): roleName is string => typeof roleName === 'string')
+          .map((roleName: string) => roleName.trim().toLowerCase())
+      : []
   } catch {
     return []
   }
@@ -26,10 +30,17 @@ function resolveRole(roles: string[]): AuthRole | null {
 }
 
 const routeAccess: Record<string, AuthRole[]> = {
+  '/dashboard': ['admin', 'faculty', 'student', 'advisor'],
   '/users': ['admin'],
   '/mapping': ['admin', 'faculty'],
-  '/materials': ['admin', 'faculty', 'advisor', 'student'],
+  '/materials': ['admin', 'faculty', 'advisor'],
   '/courses': ['admin', 'faculty', 'advisor'],
+  '/reports': ['admin', 'advisor'],
+  '/my-courses': ['student'],
+  '/student-assistant': ['student'],
+  '/advisor-students': ['faculty', 'advisor', 'admin'],
+  '/documents': ['admin', 'faculty'],
+  '/assessments': ['admin', 'faculty', 'advisor'],
 }
 
 export function middleware(request: NextRequest) {
@@ -59,5 +70,17 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/users/:path*', '/mapping/:path*', '/materials/:path*'],
+  matcher: [
+    '/dashboard/:path*',
+    '/users/:path*',
+    '/mapping/:path*',
+    '/materials/:path*',
+    '/courses/:path*',
+    '/reports/:path*',
+    '/my-courses/:path*',
+    '/student-assistant/:path*',
+    '/advisor-students/:path*',
+    '/documents/:path*',
+    '/assessments/:path*',
+  ],
 }

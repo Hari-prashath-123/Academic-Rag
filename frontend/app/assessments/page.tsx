@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Plus, TrendingUp } from 'lucide-react'
+import { RoleGuard } from '@/components/role-guard'
 
 const assessmentData = [
   { id: 1, subject: 'Data Structures', assessment: 'CIA 1', avg_score: 78, total_students: 45, status: 'Completed' },
@@ -19,11 +20,12 @@ const assessmentData = [
 
 export default function AssessmentsPage() {
   return (
-    <div className="flex min-h-screen bg-background">
-      <Sidebar />
-      <main className="flex-1 flex flex-col">
-        <Header />
-        <div className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8 space-y-6">
+    <RoleGuard allowedRoles={['admin', 'faculty', 'advisor']}>
+      <div className="flex min-h-screen bg-background">
+        <Sidebar />
+        <main className="flex-1 flex flex-col">
+          <Header />
+          <div className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8 space-y-6">
           <div>
             <div className="flex items-center justify-between mb-2">
               <h1 className="text-3xl font-bold text-foreground">Marks & Assessments</h1>
@@ -125,8 +127,9 @@ export default function AssessmentsPage() {
               </div>
             </CardContent>
           </Card>
-        </div>
-      </main>
-    </div>
+          </div>
+        </main>
+      </div>
+    </RoleGuard>
   )
 }

@@ -1,20 +1,37 @@
 """Course and course-material routes for course-wise uploads."""
+import mimetypes
 import os
 import shutil
 from datetime import datetime
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile, status
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from config import settings
 from models import get_db
+from models.advisor_mapping import AdvisorStudentMapping
 from models.course_material import Course, CourseMaterial, MaterialType
 from models.user import User
-from utils.auth import get_current_active_user, get_current_admin_user, get_current_faculty_or_admin_user
+from utils.auth import (
+    get_current_active_user,
+    get_current_admin_user,
+    get_current_faculty_or_admin_user,
+    get_user_roles_and_permissions,
+)
 
 router = APIRouter(prefix="/api/course-materials", tags=["Course Materials"])
+
+
+def _get_student_advisor_ids(db: Session, student_id: UUID) -> list[UUID]:
+    advisor_rows = (
+        db.query(AdvisorStudentMapping.advisor_id)
+        .filter(AdvisorStudentMapping.student_id == student_id)
+        .all()
+    )
+    return [row[0] for row in advisor_rows]
 
 
 class CourseCreateRequest(BaseModel):
@@ -56,10 +73,29 @@ async def create_course(
 @router.get("/courses")
 async def list_courses(
     db: Session = Depends(get_db),
-    _: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_active_user),
 ):
     """List all courses for material upload filtering."""
-    courses = db.query(Course).order_by(Course.code.asc()).all()
+    current_roles, _ = get_user_roles_and_permissions(current_user)
+
+    if "student" in current_roles:
+        advisor_ids = _get_student_advisor_ids(db, current_user.id)
+
+        if not advisor_ids:
+            courses = []
+        else:
+            courses = (
+                db.query(Course)
+                .join(CourseMaterial, CourseMaterial.course_id == Course.id)
+                .filter(CourseMaterial.is_deleted.is_(False))
+                .filter(CourseMaterial.uploaded_by.in_(advisor_ids))
+                .distinct()
+                .order_by(Course.code.asc())
+                .all()
+            )
+    else:
+        courses = db.query(Course).order_by(Course.code.asc()).all()
+
     return {
         "courses": [
             {
@@ -136,6 +172,8 @@ async def upload_course_material(
             "title": material.title,
             "material_type": material.material_type.value,
             "file_path": material.file_path,
+            "file_name": os.path.basename(material.file_path) if material.file_path else None,
+            "media_type": mimetypes.guess_type(material.file_path)[0] if material.file_path else None,
             "file_size": material.file_size,
         }
     except HTTPException:
@@ -152,10 +190,19 @@ async def list_materials(
     course_id: str | None = None,
     material_type: MaterialType | None = None,
     db: Session = Depends(get_db),
-    _: User = Depends(get_current_active_user),
+    current_user: User = Depends(get_current_active_user),
 ):
     """List course materials, optionally filtered by course and type."""
     query = db.query(CourseMaterial).filter(CourseMaterial.is_deleted.is_(False))
+    current_roles, _ = get_user_roles_and_permissions(current_user)
+
+    if "student" in current_roles:
+        advisor_ids = _get_student_advisor_ids(db, current_user.id)
+
+        if not advisor_ids:
+            return {"materials": [], "total": 0}
+
+        query = query.filter(CourseMaterial.uploaded_by.in_(advisor_ids))
 
     if course_id:
         query = query.filter(CourseMaterial.course_id == UUID(course_id))
@@ -175,9 +222,48 @@ async def list_materials(
                 "title": row.title,
                 "material_type": row.material_type.value,
                 "file_path": row.file_path,
+                "file_name": os.path.basename(row.file_path) if row.file_path else None,
+                "media_type": mimetypes.guess_type(row.file_path)[0] if row.file_path else None,
                 "uploaded_at": row.uploaded_at.isoformat() if row.uploaded_at else None,
             }
             for row in rows
         ],
         "total": len(rows),
     }
+
+
+@router.get("/{material_id}/download")
+async def download_material(
+    material_id: str,
+    inline: bool = Query(False),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """Download or view a material file with role-aware access checks."""
+    material = (
+        db.query(CourseMaterial)
+        .filter(CourseMaterial.id == UUID(material_id), CourseMaterial.is_deleted.is_(False))
+        .first()
+    )
+    if material is None:
+        raise HTTPException(status_code=404, detail="Material not found")
+
+    current_roles, _ = get_user_roles_and_permissions(current_user)
+    if "student" in current_roles:
+        advisor_ids = _get_student_advisor_ids(db, current_user.id)
+        if not advisor_ids or material.uploaded_by not in advisor_ids:
+            raise HTTPException(status_code=403, detail="You are not allowed to access this material")
+
+    if not material.file_path or not os.path.exists(material.file_path):
+        raise HTTPException(status_code=404, detail="Material file not found")
+
+    media_type = mimetypes.guess_type(material.file_path)[0] or "application/octet-stream"
+    download_name = os.path.basename(material.file_path)
+    disposition = "inline" if inline else "attachment"
+
+    return FileResponse(
+        path=material.file_path,
+        media_type=media_type,
+        filename=download_name,
+        headers={"Content-Disposition": f'{disposition}; filename="{download_name}"'},
+    )

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { Sidebar } from '@/components/sidebar'
 import { Header } from '@/components/header'
 import { OBEReportGenerator } from '@/components/obe-report-generator'
+import { RoleGuard } from '@/components/role-guard'
 import {
   BarChart,
   Bar,
@@ -72,12 +73,13 @@ export default function ReportsPage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <Sidebar />
-      <main className="flex-1 flex flex-col">
-        <Header />
-        <div className="flex-1 overflow-auto p-6">
-          <div className="max-w-5xl mx-auto">
+    <RoleGuard allowedRoles={['admin', 'advisor']}>
+      <div className="flex min-h-screen bg-background">
+        <Sidebar />
+        <main className="flex-1 flex flex-col">
+          <Header />
+          <div className="flex-1 overflow-auto p-6">
+            <div className="max-w-5xl mx-auto">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-2xl font-semibold">CO Attainment</h2>
               <div>
@@ -111,9 +113,10 @@ export default function ReportsPage() {
             <div className="mt-8">
               <OBEReportGenerator />
             </div>
+            </div>
           </div>
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
+    </RoleGuard>
   )
 }

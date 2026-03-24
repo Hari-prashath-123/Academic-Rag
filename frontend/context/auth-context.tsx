@@ -2,6 +2,7 @@
 
 import React, { createContext, useState, useEffect, useContext, useCallback, useMemo } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
+import axios from 'axios'
 import api from '../lib/api'
 
 export type AuthRole = 'admin' | 'faculty' | 'student' | 'advisor'
@@ -67,16 +68,20 @@ function resolveRole(roles: string[] | undefined): AuthRole | null {
     return null
   }
 
-  if (roles.includes('admin')) {
+  const normalizedRoles = roles
+    .filter((roleName): roleName is string => typeof roleName === 'string')
+    .map((roleName) => roleName.trim().toLowerCase())
+
+  if (normalizedRoles.some((roleName) => roleName === 'admin' || roleName.includes('admin'))) {
     return 'admin'
   }
-  if (roles.includes('faculty')) {
+  if (normalizedRoles.some((roleName) => roleName === 'faculty' || roleName.includes('faculty'))) {
     return 'faculty'
   }
-  if (roles.includes('advisor')) {
+  if (normalizedRoles.some((roleName) => roleName === 'advisor' || roleName.includes('advisor'))) {
     return 'advisor'
   }
-  if (roles.includes('student')) {
+  if (normalizedRoles.some((roleName) => roleName === 'student' || roleName.includes('student'))) {
     return 'student'
   }
   return null
@@ -117,10 +122,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const profile = res.data as AuthUser
       setUser(profile)
       setRole(resolveRole(profile.roles))
-    } catch {
-      clearStoredToken()
-      setUser(null)
-      setRole(null)
+    } catch (error: unknown) {
+      const status = axios.isAxiosError(error) ? error.response?.status : undefined
+      const shouldClearAuth = status === 401 || status === 403
+
+      if (shouldClearAuth) {
+        clearStoredToken()
+        setUser(null)
+        setRole(null)
+      }
     } finally {
       setLoading(false)
     }
@@ -148,10 +158,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       document.cookie = `token=${token}; Path=/; SameSite=Strict${secureFlag}`
     }
 
-    setRoleFromToken(token)
+    const tokenRole = resolveRole(
+      Array.isArray(response?.data?.roles) ? response.data.roles : parseJwtPayload(token)?.roles
+    )
+    const payload = parseJwtPayload(token)
 
-    await refreshUser()
-    return resolveRole(Array.isArray(response?.data?.roles) ? response.data.roles : parseJwtPayload(token)?.roles)
+    // Immediately set auth state from token so UI doesn't flash as Guest.
+    setRoleFromToken(token)
+    setUser((prev) => ({
+      id: (payload?.sub as string) || prev?.id || '',
+      email: (payload?.email as string) || email.trim(),
+      profile: prev?.profile || {},
+      roles: Array.isArray(payload?.roles) ? payload.roles : tokenRole ? [tokenRole] : [],
+      permissions: prev?.permissions || [],
+    }))
+
+    // Best-effort profile hydration from backend.
+    try {
+      await refreshUser()
+    } catch {
+      // refreshUser already handles auth-clear rules.
+    }
+
+    return tokenRole
   }
 
   const logout = () => {

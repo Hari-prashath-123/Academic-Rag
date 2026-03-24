@@ -37,6 +37,8 @@ export default function LoginPage() {
         router.push('/users')
       } else if (role === 'faculty') {
         router.push('/materials')
+      } else if (role === 'advisor') {
+        router.push('/reports')
       } else {
         router.push('/dashboard')
       }

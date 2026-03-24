@@ -51,13 +51,20 @@ def needs_password_rehash(hashed_password: str) -> bool:
 
 def get_user_roles_and_permissions(user: User) -> tuple[list[str], list[str]]:
     """Build role and permission lists from RBAC relationships."""
-    roles = sorted({assignment.role.name for assignment in user.user_roles if assignment.role is not None})
+    roles = sorted(
+        {
+            assignment.role.name.strip().lower()
+            for assignment in user.user_roles
+            if assignment.role is not None and assignment.role.name
+        }
+    )
     permissions = sorted(
         {
-            permission.permission_name
+            permission.permission_name.strip()
             for assignment in user.user_roles
             if assignment.role is not None
             for permission in assignment.role.permissions
+            if permission.permission_name
         }
     )
     return roles, permissions

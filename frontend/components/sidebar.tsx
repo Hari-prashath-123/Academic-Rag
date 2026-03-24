@@ -16,6 +16,7 @@ import {
   Menu,
   X,
   ChevronRight,
+  LogOut,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -42,10 +43,16 @@ const navItems: NavItem[] = [
     roles: ['admin', 'faculty', 'student'],
   },
   {
+    label: 'Study Assistant',
+    href: '/student-assistant',
+    icon: BookOpen,
+    roles: ['student'],
+  },
+  {
     label: 'Document Library',
     href: '/documents',
     icon: FileText,
-    roles: ['admin', 'faculty', 'student'],
+    roles: ['admin', 'faculty'],
   },
   {
     label: 'Question Papers',
@@ -57,7 +64,7 @@ const navItems: NavItem[] = [
     label: 'Marks & Assessments',
     href: '/assessments',
     icon: BarChart3,
-    roles: ['admin', 'faculty', 'student'],
+    roles: ['admin', 'faculty', 'advisor'],
   },
   {
     label: 'Advisor Mapping',
@@ -69,7 +76,7 @@ const navItems: NavItem[] = [
     label: 'OBE Report Generator',
     href: '/reports',
     icon: BookOpen,
-    roles: ['admin', 'faculty', 'advisor'],
+    roles: ['admin', 'advisor'],
   },
   {
     label: 'Manage Courses',
@@ -81,7 +88,7 @@ const navItems: NavItem[] = [
     label: 'Upload Materials',
     href: '/materials',
     icon: BookOpen,
-    roles: ['admin', 'faculty', 'advisor', 'student'],
+    roles: ['admin', 'faculty', 'advisor'],
   },
   {
     label: 'User Management',
@@ -91,13 +98,13 @@ const navItems: NavItem[] = [
   },
   {
     label: 'My Students',
-    href: '/mapping',
+    href: '/advisor-students',
     icon: Users,
-    roles: ['faculty'],
+    roles: ['faculty', 'advisor'],
   },
   {
     label: 'My Courses',
-    href: '/materials',
+    href: '/my-courses',
     icon: BookOpen,
     roles: ['student'],
   },
@@ -112,7 +119,7 @@ const navItems: NavItem[] = [
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(true)
   const pathname = usePathname()
-  const { role, user } = useAuth()
+  const { role, user, logout } = useAuth()
 
   const allowedNavItems = navItems.filter((item) => {
     if (!role) {
@@ -189,7 +196,7 @@ export function Sidebar() {
         </nav>
 
         {/* Footer */}
-        <div className="p-3 border-t border-sidebar-border">
+        <div className="p-3 border-t border-sidebar-border space-y-2">
           <div className="flex items-center gap-3 px-3 py-2">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent to-primary flex items-center justify-center">
               <span className="text-white text-xs font-bold">U</span>
@@ -205,6 +212,18 @@ export function Sidebar() {
               </div>
             )}
           </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={logout}
+            className={cn(
+              'w-full',
+              !isOpen && 'p-2'
+            )}
+          >
+            <LogOut className="w-4 h-4" />
+            {isOpen && <span className="ml-2">Logout</span>}
+          </Button>
         </div>
       </aside>
 

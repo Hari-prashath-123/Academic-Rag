@@ -32,13 +32,31 @@ Write-Host "Academic RAG Backend - Multi-Service Launcher" -ForegroundColor Cyan
 Write-Host "================================================================" -ForegroundColor Cyan
 Write-Host ""
 
-# Activate virtual environment
-Write-Host "Activating Python virtual environment..." -ForegroundColor Green
-& .\venv\Scripts\Activate.ps1
-if ($LASTEXITCODE -ne 0) {
-    Write-Host "ERROR: Failed to activate virtual environment" -ForegroundColor Red
+# Resolve Python executable from local backend virtual environment
+Write-Host "Resolving Python virtual environment..." -ForegroundColor Green
+
+$pythonCandidates = @(
+    (Join-Path $BackendDir 'venv\Scripts\python.exe'),
+    (Join-Path $BackendDir '.venv\Scripts\python.exe')
+)
+
+$pythonExe = $null
+foreach ($candidate in $pythonCandidates) {
+    if (Test-Path $candidate) {
+        $pythonExe = $candidate
+        break
+    }
+}
+
+if (-not $pythonExe) {
+    Write-Host "ERROR: Could not find backend virtual environment Python." -ForegroundColor Red
+    Write-Host "Expected one of:" -ForegroundColor Red
+    Write-Host "  - $($pythonCandidates[0])" -ForegroundColor Red
+    Write-Host "  - $($pythonCandidates[1])" -ForegroundColor Red
     exit 1
 }
+
+Write-Host "Using Python: $pythonExe" -ForegroundColor Green
 
 Write-Host ""
 Write-Host "Starting services..." -ForegroundColor Green
@@ -46,14 +64,14 @@ Write-Host ""
 
 # Start FastAPI on port 8000
 Write-Host "Launching FastAPI REST API on http://127.0.0.1:8000..." -ForegroundColor Yellow
-$fastApiProcess = Start-Process -NoNewWindow -FilePath "python" -ArgumentList @("manage.py", "runserver", "127.0.0.1:8000") -PassThru
+$fastApiProcess = Start-Process -NoNewWindow -FilePath $pythonExe -ArgumentList @("manage.py", "runserver", "127.0.0.1:8000") -PassThru
 
 # Small delay to let FastAPI start
 Start-Sleep -Milliseconds 1000
 
 # Start Django admin on port 8001
 Write-Host "Launching Django Admin Portal on http://127.0.0.1:8001..." -ForegroundColor Yellow
-$djangoProcess = Start-Process -NoNewWindow -FilePath "python" -ArgumentList @("django_manage.py", "runserver", "127.0.0.1:8001", "--noreload") -PassThru
+$djangoProcess = Start-Process -NoNewWindow -FilePath $pythonExe -ArgumentList @("django_manage.py", "runserver", "127.0.0.1:8001", "--noreload") -PassThru
 
 Write-Host ""
 Write-Host "================================================================" -ForegroundColor Green
