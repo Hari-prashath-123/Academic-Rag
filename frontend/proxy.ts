@@ -37,15 +37,19 @@ const routeAccess: Record<string, AuthRole[]> = {
   '/courses': ['admin', 'faculty', 'advisor'],
   '/reports': ['admin', 'advisor'],
   '/my-courses': ['student'],
-  '/student-assistant': ['student'],
   '/advisor-students': ['faculty', 'advisor', 'admin'],
   '/documents': ['admin', 'faculty'],
-  '/assessments': ['admin', 'faculty', 'advisor'],
 }
 
-export function middleware(request: NextRequest) {
+const removedRoutes = ['/assessments', '/reports']
+
+export function proxy(request: NextRequest) {
   const token = request.cookies.get('token')?.value
   const { pathname } = request.nextUrl
+
+  if (removedRoutes.some((route) => pathname.startsWith(route))) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
 
   const matchedRoute = Object.keys(routeAccess).find((route) => pathname.startsWith(route))
   if (!matchedRoute) {
@@ -78,9 +82,9 @@ export const config = {
     '/courses/:path*',
     '/reports/:path*',
     '/my-courses/:path*',
-    '/student-assistant/:path*',
     '/advisor-students/:path*',
     '/documents/:path*',
     '/assessments/:path*',
+    '/reports/:path*',
   ],
 }

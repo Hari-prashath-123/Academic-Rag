@@ -15,6 +15,8 @@ from models import get_db
 from models.advisor_mapping import AdvisorStudentMapping
 from models.course_material import Course, CourseMaterial, MaterialType
 from models.user import User
+from services.document_loader import DocumentLoader
+from services.embeddings import EmbeddingService
 from utils.auth import (
     get_current_active_user,
     get_current_admin_user,
@@ -23,6 +25,36 @@ from utils.auth import (
 )
 
 router = APIRouter(prefix="/api/course-materials", tags=["Course Materials"])
+
+
+def _is_allowed_extension(filename: str) -> bool:
+    if "." not in filename:
+        return False
+    ext = filename.rsplit(".", 1)[1].lower()
+    return ext in settings.ALLOWED_EXTENSIONS
+
+
+def _index_course_material(material: CourseMaterial, course: Course):
+    """Index uploaded course material into vector store for chat RAG."""
+    loader = DocumentLoader()
+    pages = loader.load_document(material.file_path)
+
+    embedding_service = EmbeddingService()
+    embedding_service.index_document(
+        document_id=str(material.id),
+        pages=pages,
+        metadata={
+            "document_id": str(material.id),
+            "title": material.title,
+            "subject": course.code,
+            "document_type": material.material_type.value,
+            "uploader_id": str(material.uploaded_by) if material.uploaded_by else None,
+            "source_type": "course_material",
+            "course_id": str(course.id),
+            "course_code": course.code,
+            "course_name": course.name,
+        },
+    )
 
 
 def _get_student_advisor_ids(db: Session, student_id: UUID) -> list[UUID]:
@@ -124,6 +156,12 @@ async def upload_course_material(
         if not file.filename:
             raise HTTPException(status_code=400, detail="No file provided")
 
+        if not _is_allowed_extension(file.filename):
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid file type. Allowed: {', '.join(settings.ALLOWED_EXTENSIONS)}",
+            )
+
         # Normalize material_type to lowercase
         material_type_lower = material_type.lower().strip()
         try:
@@ -166,6 +204,13 @@ async def upload_course_material(
         db.commit()
         db.refresh(material)
 
+        indexing_warning = None
+        try:
+            _index_course_material(material, course)
+        except Exception as e:
+            # Keep upload successful for unsupported formats; chat retrieval may skip these.
+            indexing_warning = str(e)
+
         return {
             "id": str(material.id),
             "course_id": str(material.course_id),
@@ -175,6 +220,7 @@ async def upload_course_material(
             "file_name": os.path.basename(material.file_path) if material.file_path else None,
             "media_type": mimetypes.guess_type(material.file_path)[0] if material.file_path else None,
             "file_size": material.file_size,
+            "indexing_warning": indexing_warning,
         }
     except HTTPException:
         raise

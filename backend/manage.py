@@ -66,6 +66,14 @@ def createsuperuser() -> None:
     sys.exit(0 if success else 1)
 
 
+def migrate() -> None:
+    """Run backend SQL migrations from migrations/ directory."""
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    migrate_script = os.path.join(script_dir, "migrate.py")
+    completed = subprocess.run([sys.executable, migrate_script], check=False)
+    sys.exit(completed.returncode)
+
+
 def adminportal() -> None:
     """Run the Django admin portal service."""
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -84,6 +92,7 @@ def main() -> None:
     if len(sys.argv) < 2:
         print("Usage:")
         print("  python manage.py runserver [host:port]")
+        print("  python manage.py migrate")
         print("  python manage.py createsuperuser")
         print("  python manage.py adminportal [django-command]")
         sys.exit(1)
@@ -91,6 +100,9 @@ def main() -> None:
     command = sys.argv[1].lower()
     if command == "runserver":
         runserver()
+        return
+    if command == "migrate":
+        migrate()
         return
     if command == "createsuperuser":
         createsuperuser()
@@ -100,7 +112,7 @@ def main() -> None:
         return
 
     print(f"Unknown command: {command}")
-    print("Available commands: runserver, createsuperuser, adminportal")
+    print("Available commands: runserver, migrate, createsuperuser, adminportal")
     sys.exit(1)
 
 

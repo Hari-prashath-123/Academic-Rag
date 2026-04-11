@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-change-this")
     ALGORITHM: str = os.getenv("ALGORITHM", "HS256")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
+    REFRESH_TOKEN_EXPIRE_DAYS: int = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "7"))
     
     # OpenAI
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
@@ -48,6 +49,13 @@ class Settings(BaseSettings):
     # Mistral (Alternative)
     MISTRAL_API_KEY: str = os.getenv("MISTRAL_API_KEY", "")
     MISTRAL_MODEL: str = os.getenv("MISTRAL_MODEL", "mistral-medium")
+
+    # OpenRouter
+    OPENROUTER_API_KEY: str = os.getenv("OPENROUTER_API_KEY", "")
+    OPENROUTER_MODEL: str = os.getenv("OPENROUTER_MODEL", "nvidia/nemotron-3-super-120b-a12b:free")
+
+    # Token limits
+    DEFAULT_DAILY_TOKEN_LIMIT: int = int(os.getenv("DEFAULT_DAILY_TOKEN_LIMIT", "20000"))
     
     # Vector Store
     FAISS_INDEX_PATH: str = os.getenv("FAISS_INDEX_PATH", "./vectorstore/faiss_index")
@@ -55,7 +63,10 @@ class Settings(BaseSettings):
     
     # File Upload
     MAX_UPLOAD_SIZE: int = int(os.getenv("MAX_UPLOAD_SIZE", "10485760"))  # 10MB
-    ALLOWED_EXTENSIONS_RAW: str = os.getenv("ALLOWED_EXTENSIONS", "pdf,docx,xlsx,pptx")
+    ALLOWED_EXTENSIONS_RAW: str = os.getenv(
+        "ALLOWED_EXTENSIONS",
+        "pdf,docx,doc,xlsx,xls,xl,csv,pptx,ppt,txt,png,jpg,jpeg,gif,webp,zip,rar,7z,mp4,mp3,wav",
+    )
     UPLOAD_FOLDER: str = os.getenv("UPLOAD_FOLDER", "./uploads")
     
     # RAG Configuration

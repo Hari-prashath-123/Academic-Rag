@@ -392,12 +392,6 @@ export default function MyCoursesPage() {
                 <div className="mt-8 p-4 bg-muted rounded-lg">
                   <p className="text-sm font-medium mb-3">Quick Links</p>
                   <div className="flex gap-3">
-                    <Link href="/student-assistant">
-                      <Button variant="outline" size="sm" className="gap-2">
-                        <BookOpen className="w-4 h-4" />
-                        Study Assistant
-                      </Button>
-                    </Link>
                     <Link href="/chat">
                       <Button variant="outline" size="sm" className="gap-2">
                         <FileText className="w-4 h-4" />

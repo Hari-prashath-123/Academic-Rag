@@ -8,7 +8,6 @@ import {
   MessageSquare,
   FileText,
   HelpCircle,
-  BarChart3,
   Grid3x3,
   BookOpen,
   Users,
@@ -40,13 +39,7 @@ const navItems: NavItem[] = [
     label: 'AI Chat Assistant',
     href: '/chat',
     icon: MessageSquare,
-    roles: ['admin', 'faculty', 'student'],
-  },
-  {
-    label: 'Study Assistant',
-    href: '/student-assistant',
-    icon: BookOpen,
-    roles: ['student'],
+    roles: ['admin', 'faculty', 'student', 'advisor'],
   },
   {
     label: 'Document Library',
@@ -61,22 +54,10 @@ const navItems: NavItem[] = [
     roles: ['admin', 'faculty', 'student'],
   },
   {
-    label: 'Marks & Assessments',
-    href: '/assessments',
-    icon: BarChart3,
-    roles: ['admin', 'faculty', 'advisor'],
-  },
-  {
     label: 'Advisor Mapping',
     href: '/mapping',
     icon: Grid3x3,
     roles: ['admin'],
-  },
-  {
-    label: 'OBE Report Generator',
-    href: '/reports',
-    icon: BookOpen,
-    roles: ['admin', 'advisor'],
   },
   {
     label: 'Manage Courses',
@@ -119,7 +100,7 @@ const navItems: NavItem[] = [
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(true)
   const pathname = usePathname()
-  const { role, user, logout } = useAuth()
+  const { role, user, loading, logout } = useAuth()
 
   const allowedNavItems = navItems.filter((item) => {
     if (!role) {
@@ -130,7 +111,6 @@ export function Sidebar() {
 
   return (
     <>
-      {/* Mobile Toggle */}
       <Button
         variant="ghost"
         size="icon"
@@ -140,7 +120,6 @@ export function Sidebar() {
         {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </Button>
 
-      {/* Sidebar */}
       <aside
         className={cn(
           'fixed left-0 top-0 h-full bg-sidebar border-r border-sidebar-border transition-all duration-300 z-40',
@@ -195,7 +174,6 @@ export function Sidebar() {
           })}
         </nav>
 
-        {/* Footer */}
         <div className="p-3 border-t border-sidebar-border space-y-2">
           <div className="flex items-center gap-3 px-3 py-2">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent to-primary flex items-center justify-center">
@@ -204,10 +182,10 @@ export function Sidebar() {
             {isOpen && (
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-medium text-sidebar-foreground truncate">
-                  {user?.email ?? 'Guest'}
+                  {loading ? 'Loading...' : (user?.email ?? 'Guest')}
                 </p>
                 <p className="text-xs text-sidebar-foreground/50 truncate">
-                  {role ? role.charAt(0).toUpperCase() + role.slice(1) : 'Unknown'}
+                  {loading ? 'Checking session' : (role ? role.charAt(0).toUpperCase() + role.slice(1) : 'Unknown')}
                 </p>
               </div>
             )}
@@ -227,7 +205,6 @@ export function Sidebar() {
         </div>
       </aside>
 
-      {/* Content Offset */}
       <div className={cn('transition-all duration-300', isOpen ? 'lg:ml-64' : 'lg:ml-20')} />
     </>
   )

@@ -50,6 +50,18 @@ class User(Base):
         back_populates="student",
         cascade="all, delete-orphan",
     )
+    token_limit = relationship(
+        "UserTokenLimit",
+        foreign_keys="UserTokenLimit.user_id",
+        back_populates="user",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+    daily_token_usage = relationship(
+        "UserDailyTokenUsage",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
 
     def __repr__(self):
         return f"<User(id={self.id}, email={self.email})>"

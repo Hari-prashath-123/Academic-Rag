@@ -2,7 +2,7 @@
 from datetime import datetime
 import enum
 
-from sqlalchemy import Column, DateTime, Enum as SQLEnum, ForeignKey, String, Text, text
+from sqlalchemy import JSON, Column, DateTime, Enum as SQLEnum, ForeignKey, String, Text, text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
@@ -30,8 +30,16 @@ class ChatHistory(Base):
     )
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     session_id = Column(String, nullable=False, index=True)
-    message_role = Column(SQLEnum(MessageRole), nullable=False)
+    message_role = Column(
+        SQLEnum(
+            MessageRole,
+            values_callable=lambda enum_cls: [member.value for member in enum_cls],
+            native_enum=False,
+        ),
+        nullable=False,
+    )
     message_content = Column(Text, nullable=False)
+    reasoning_details = Column(JSON, nullable=True)
     timestamp = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
 
     user = relationship("User", back_populates="chat_messages")

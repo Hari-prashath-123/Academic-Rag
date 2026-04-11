@@ -2,9 +2,10 @@
 from datetime import timedelta
 from typing import Optional
 import re
+from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.responses import HTMLResponse
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, Field, field_validator
 from sqlalchemy.orm import Session
 
@@ -14,6 +15,8 @@ from models.role import Role, UserRole
 from models.user import Profile, User
 from utils.auth import (
     create_access_token,
+    create_refresh_token,
+    decode_access_token,
     get_current_user_access,
     get_password_hash,
     get_user_roles_and_permissions,
@@ -31,77 +34,13 @@ def validate_email(email: str) -> str:
     return email
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
+accounts_router = APIRouter(prefix="/api/accounts", tags=["Accounts Authentication"])
 
 
-@router.get("/login-page", response_class=HTMLResponse)
-async def login_page() -> HTMLResponse:
-        """Simple backend login page for manual authentication testing."""
-        return HTMLResponse(
-                """
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Backend Login</title>
-    <style>
-        body { font-family: Segoe UI, Arial, sans-serif; background:#f5f7fb; margin:0; }
-        .wrap { max-width:420px; margin:60px auto; background:#fff; border:1px solid #dfe3eb; border-radius:12px; padding:24px; }
-        h1 { margin:0 0 8px; font-size:22px; }
-        p { margin:0 0 18px; color:#555; font-size:14px; }
-        label { display:block; margin:10px 0 6px; font-size:14px; }
-        input { width:100%; padding:10px; border:1px solid #c8d0dd; border-radius:8px; box-sizing:border-box; }
-        button { margin-top:14px; width:100%; padding:10px; border:0; background:#0d6efd; color:#fff; border-radius:8px; cursor:pointer; }
-        pre { margin-top:14px; background:#0b1020; color:#d6e2ff; padding:10px; border-radius:8px; overflow:auto; font-size:12px; }
-        .err { margin-top:10px; color:#b00020; font-size:13px; }
-    </style>
-</head>
-<body>
-    <div class="wrap">
-        <h1>Backend Login</h1>
-        <p>Posts to /api/auth/login and stores token in localStorage.</p>
-        <form id="loginForm">
-            <label for="email">Email</label>
-            <input id="email" type="email" required />
-            <label for="password">Password</label>
-            <input id="password" type="password" required />
-            <button type="submit">Login</button>
-        </form>
-        <div id="error" class="err"></div>
-        <pre id="result" hidden></pre>
-    </div>
-    <script>
-        const form = document.getElementById('loginForm');
-        const error = document.getElementById('error');
-        const result = document.getElementById('result');
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            error.textContent = '';
-            result.hidden = true;
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            try {
-                const res = await fetch('/api/auth/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-                const data = await res.json();
-                if (!res.ok) {
-                    throw new Error(data.detail || 'Login failed');
-                }
-                localStorage.setItem('token', data.access_token);
-                result.hidden = false;
-                result.textContent = JSON.stringify(data, null, 2);
-            } catch (err) {
-                error.textContent = err.message || 'Login failed';
-            }
-        });
-    </script>
-</body>
-</html>
-                """
-        )
+@router.get("/login-page")
+async def login_page() -> RedirectResponse:
+    """Redirect login-page requests to the Django admin login screen."""
+    return RedirectResponse(url="/admin/login/?next=/admin/", status_code=status.HTTP_307_TEMPORARY_REDIRECT)
 
 
 class RegisterRequest(BaseModel):
@@ -135,7 +74,14 @@ class TokenResponse(BaseModel):
     """JWT response payload."""
 
     access_token: str
+    refresh_token: Optional[str] = None
     token_type: str = "bearer"
+
+
+class RefreshTokenRequest(BaseModel):
+    """Refresh token exchange request body."""
+
+    refresh: str
 
 
 class MeResponse(BaseModel):
@@ -159,6 +105,29 @@ def _get_or_create_role(db: Session, role_name: str) -> Role:
     db.add(role)
     db.flush()
     return role
+
+
+def _build_token_response(user: User) -> dict:
+    """Return a fresh access/refresh token pair for a user."""
+    roles, _ = get_user_roles_and_permissions(user)
+
+    token_payload = {
+        "sub": str(user.id),
+        "email": user.email,
+        "roles": roles,
+    }
+
+    access_token = create_access_token(
+        data=token_payload,
+        expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
+    )
+    refresh_token = create_refresh_token(data=token_payload)
+
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer",
+    }
 
 
 @router.post("/register", status_code=status.HTTP_201_CREATED)
@@ -218,18 +187,42 @@ async def login(user_data: LoginRequest, db: Session = Depends(get_db)):
         db.commit()
         db.refresh(user)
 
-    roles, _ = get_user_roles_and_permissions(user)
+    return _build_token_response(user)
 
-    access_token = create_access_token(
-        data={
-            "sub": str(user.id),
-            "email": user.email,
-            "roles": roles,
-        },
-        expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
-    )
 
-    return {"access_token": access_token, "token_type": "bearer"}
+@router.post("/token", response_model=TokenResponse)
+async def issue_token(user_data: LoginRequest, db: Session = Depends(get_db)):
+    """Compatibility alias for login using token endpoint naming."""
+    return await login(user_data=user_data, db=db)
+
+
+@router.post("/token/refresh", response_model=TokenResponse)
+async def refresh_token(payload: RefreshTokenRequest, db: Session = Depends(get_db)):
+    """Issue a new token pair from a valid refresh token."""
+    decoded = decode_access_token(payload.refresh, expected_token_type="refresh")
+    user_id = decoded.get("sub")
+
+    if not user_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid refresh token subject",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    try:
+        user_uuid = UUID(str(user_id))
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid refresh token subject",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    user = db.query(User).filter(User.id == user_uuid).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+    return _build_token_response(user)
 
 
 @router.get("/me", response_model=MeResponse)
@@ -250,3 +243,24 @@ async def get_current_user_profile(user_access: dict = Depends(get_current_user_
         "roles": user_access["roles"],
         "permissions": user_access["permissions"],
     }
+
+
+@accounts_router.post("/token", response_model=TokenResponse)
+@accounts_router.post("/token/", response_model=TokenResponse)
+async def accounts_issue_token(user_data: LoginRequest, db: Session = Depends(get_db)):
+    """Django/DRF-style token endpoint alias."""
+    return await issue_token(user_data=user_data, db=db)
+
+
+@accounts_router.post("/token/refresh", response_model=TokenResponse)
+@accounts_router.post("/token/refresh/", response_model=TokenResponse)
+async def accounts_refresh_token(payload: RefreshTokenRequest, db: Session = Depends(get_db)):
+    """Django/DRF-style refresh endpoint alias."""
+    return await refresh_token(payload=payload, db=db)
+
+
+@accounts_router.get("/me", response_model=MeResponse)
+@accounts_router.get("/me/", response_model=MeResponse)
+async def accounts_get_current_user_profile(user_access: dict = Depends(get_current_user_access)):
+    """Django/DRF-style me endpoint alias."""
+    return await get_current_user_profile(user_access=user_access)

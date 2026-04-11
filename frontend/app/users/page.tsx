@@ -34,6 +34,15 @@ type AdvisorMapping = {
   assigned_at: string
 }
 
+type TokenLimitRow = {
+  user_id: string
+  email: string
+  roles: string[]
+  daily_token_limit: number
+  today_used_tokens: number
+  today_remaining_tokens: number
+}
+
 function resolveDisplayRole(roles: string[]): string {
   if (roles.includes('admin')) return 'admin'
   if (roles.includes('faculty')) return 'faculty'
@@ -55,15 +64,21 @@ export default function UsersPage() {
   const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([])
   const [mappingLoading, setMappingLoading] = useState(false)
   const [mappingError, setMappingError] = useState('')
+  const [tokenLimits, setTokenLimits] = useState<TokenLimitRow[]>([])
+  const [tokenDrafts, setTokenDrafts] = useState<Record<string, string>>({})
+  const [tokenSaving, setTokenSaving] = useState<Record<string, boolean>>({})
+  const [bulkTokenLimit, setBulkTokenLimit] = useState('')
+  const [bulkSaving, setBulkSaving] = useState(false)
 
   useEffect(() => {
     const fetchAllData = async () => {
       try {
-        const [usersRes, facultyRes, studentsRes, mappingsRes] = await Promise.all([
+        const [usersRes, facultyRes, studentsRes, mappingsRes, tokenLimitsRes] = await Promise.all([
           api.get('/api/users/'),
           api.get('/api/users/faculty'),
           api.get('/api/users/students'),
           api.get('/api/advisor-mappings/'),
+          api.get('/api/users/token-limits'),
         ])
 
         const apiUsers: ApiUser[] = usersRes.data.users || []
@@ -88,6 +103,15 @@ export default function UsersPage() {
         setStudents(studentsList)
 
         setMappings(mappingsRes.data.mappings || [])
+
+        const tokenRows: TokenLimitRow[] = tokenLimitsRes.data?.users || []
+        setTokenLimits(tokenRows)
+        setTokenDrafts(
+          tokenRows.reduce((acc, row) => {
+            acc[row.user_id] = String(row.daily_token_limit)
+            return acc
+          }, {} as Record<string, string>)
+        )
       } catch (err: any) {
         setError(err?.response?.data?.detail || 'Failed to load data')
       } finally {
@@ -144,6 +168,66 @@ export default function UsersPage() {
       setMappings(res.data.mappings || [])
     } catch {
       setMappingError('Failed to remove mapping.')
+    }
+  }
+
+  const saveTokenLimit = async (userId: string) => {
+    const raw = tokenDrafts[userId]
+    const nextLimit = Number(raw)
+    if (!Number.isFinite(nextLimit) || nextLimit < 1) {
+      setError('Token limit must be a positive number.')
+      return
+    }
+
+    setTokenSaving((prev) => ({ ...prev, [userId]: true }))
+    try {
+      await api.put(`/api/users/${userId}/token-limit`, {
+        daily_token_limit: Math.floor(nextLimit),
+      })
+
+      const refreshed = await api.get('/api/users/token-limits')
+      const rows: TokenLimitRow[] = refreshed.data?.users || []
+      setTokenLimits(rows)
+      setTokenDrafts(
+        rows.reduce((acc, row) => {
+          acc[row.user_id] = String(row.daily_token_limit)
+          return acc
+        }, {} as Record<string, string>)
+      )
+    } catch (err: any) {
+      setError(err?.response?.data?.detail || 'Failed to update token limit')
+    } finally {
+      setTokenSaving((prev) => ({ ...prev, [userId]: false }))
+    }
+  }
+
+  const applyBulkTokenLimit = async () => {
+    const nextLimit = Number(bulkTokenLimit)
+    if (!Number.isFinite(nextLimit) || nextLimit < 1) {
+      setError('Bulk token limit must be a positive number.')
+      return
+    }
+
+    setBulkSaving(true)
+    try {
+      await api.put('/api/users/token-limits/bulk', {
+        daily_token_limit: Math.floor(nextLimit),
+      })
+
+      const refreshed = await api.get('/api/users/token-limits')
+      const rows: TokenLimitRow[] = refreshed.data?.users || []
+      setTokenLimits(rows)
+      setTokenDrafts(
+        rows.reduce((acc, row) => {
+          acc[row.user_id] = String(row.daily_token_limit)
+          return acc
+        }, {} as Record<string, string>)
+      )
+      setBulkTokenLimit('')
+    } catch (err: any) {
+      setError(err?.response?.data?.detail || 'Failed to bulk update token limits')
+    } finally {
+      setBulkSaving(false)
     }
   }
 
@@ -267,6 +351,93 @@ export default function UsersPage() {
                                 <Trash2 className="w-4 h-4" />
                               </Button>
                             </div>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-border/50 bg-card/50 backdrop-blur overflow-hidden">
+            <CardHeader className="bg-secondary/50 border-b border-border">
+              <CardTitle>Daily Token Limits</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="flex flex-col md:flex-row md:items-center gap-3 p-4 border-b border-border/40 bg-secondary/20">
+                <p className="text-sm text-muted-foreground md:mr-auto">
+                  Bulk Manage: update daily token limit for all users at once.
+                </p>
+                <input
+                  type="number"
+                  min={1}
+                  placeholder="All users limit"
+                  className="w-full md:w-40 rounded-md border border-border bg-background px-2 py-1 text-sm"
+                  value={bulkTokenLimit}
+                  onChange={(e) => setBulkTokenLimit(e.target.value)}
+                />
+                <Button
+                  size="sm"
+                  onClick={applyBulkTokenLimit}
+                  disabled={bulkSaving}
+                >
+                  {bulkSaving ? 'Updating...' : 'Update All Users'}
+                </Button>
+              </div>
+
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-secondary/30 border-border/30">
+                      <TableHead className="font-semibold">User</TableHead>
+                      <TableHead className="font-semibold">Roles</TableHead>
+                      <TableHead className="font-semibold">Used Today</TableHead>
+                      <TableHead className="font-semibold">Remaining</TableHead>
+                      <TableHead className="font-semibold">Daily Limit</TableHead>
+                      <TableHead className="text-right font-semibold">Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {tokenLimits.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                          No token limit records available
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      tokenLimits.map((row) => (
+                        <TableRow key={row.user_id} className="border-border/30 hover:bg-secondary/30">
+                          <TableCell className="font-medium">{row.email}</TableCell>
+                          <TableCell>
+                            <div className="flex gap-1 flex-wrap">
+                              {row.roles.map((role) => (
+                                <Badge key={`${row.user_id}-${role}`} variant="outline">{role}</Badge>
+                              ))}
+                            </div>
+                          </TableCell>
+                          <TableCell>{row.today_used_tokens}</TableCell>
+                          <TableCell>{row.today_remaining_tokens}</TableCell>
+                          <TableCell>
+                            <input
+                              type="number"
+                              min={1}
+                              className="w-28 rounded-md border border-border bg-background px-2 py-1 text-sm"
+                              value={tokenDrafts[row.user_id] || ''}
+                              onChange={(e) =>
+                                setTokenDrafts((prev) => ({ ...prev, [row.user_id]: e.target.value }))
+                              }
+                            />
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <Button
+                              size="sm"
+                              onClick={() => saveTokenLimit(row.user_id)}
+                              disabled={Boolean(tokenSaving[row.user_id])}
+                            >
+                              {tokenSaving[row.user_id] ? 'Saving...' : 'Update'}
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))

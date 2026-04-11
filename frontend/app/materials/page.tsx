@@ -149,10 +149,13 @@ export default function MaterialsPage() {
                   />
                   <input
                     type="file"
-                    accept="*/*"
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.xl,.csv,.ppt,.pptx,.txt,.png,.jpg,.jpeg,.gif,.webp,.zip,.rar,.7z,.mp4,.mp3,.wav"
                     className="rounded-md border border-border bg-background px-3 py-2"
                     onChange={(e) => setFile(e.target.files?.[0] || null)}
                   />
+                  <p className="md:col-span-2 text-xs text-muted-foreground">
+                    Supported formats: pdf, doc/docx, xls/xlsx/xl/csv, ppt/pptx, txt, png, jpg/jpeg, gif, webp, zip/rar/7z, mp4/mp3/wav.
+                  </p>
                 </CardContent>
               </Card>
             ) : null}

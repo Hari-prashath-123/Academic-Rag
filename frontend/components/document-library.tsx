@@ -42,83 +42,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-
-// will be loaded from backend
-// const documents = [
-const DEFAULT_DOCS: any[] = [
-  {
-    id: 1,
-    name: 'DS_Syllabus_2024.pdf',
-    type: 'Syllabus',
-    uploadDate: '2024-01-15',
-    size: '2.4 MB',
-    status: 'Indexed',
-    subject: 'Data Structures',
-  },
-  {
-    id: 2,
-    name: 'CO_Matrix.xlsx',
-    type: 'CO Mapping',
-    uploadDate: '2024-01-20',
-    size: '892 KB',
-    status: 'Indexed',
-    subject: 'All Subjects',
-  },
-  {
-    id: 3,
-    name: 'Algorithm_QP_Mid_2024.pdf',
-    type: 'Question Paper',
-    uploadDate: '2024-02-01',
-    size: '1.8 MB',
-    status: 'Processing',
-    subject: 'Algorithms',
-  },
-  {
-    id: 4,
-    name: 'Marks_Register_Semester5.xlsx',
-    type: 'Marks',
-    uploadDate: '2024-02-05',
-    size: '645 KB',
-    status: 'Indexed',
-    subject: 'All Subjects',
-  },
-  {
-    id: 5,
-    name: 'Database_Lecture_Notes.pdf',
-    type: 'Study Material',
-    uploadDate: '2024-02-10',
-    size: '3.2 MB',
-    status: 'Indexed',
-    subject: 'Database',
-  },
-  {
-    id: 6,
-    name: 'WebDev_Assessment.docx',
-    type: 'Assessment',
-    uploadDate: '2024-02-12',
-    size: '1.1 MB',
-    status: 'Processing',
-    subject: 'Web Development',
-  },
-  {
-    id: 7,
-    name: 'Blooms_Framework.pdf',
-    type: 'CO Mapping',
-    uploadDate: '2024-02-14',
-    size: '956 KB',
-    status: 'Indexed',
-    subject: 'All Subjects',
-  },
-  {
-    id: 8,
-    name: 'Final_Exam_Questions.pdf',
-    type: 'Question Paper',
-    uploadDate: '2024-02-18',
-    size: '2.1 MB',
-    status: 'Indexed',
-    subject: 'Multiple',
-  },
-]
+import api from '@/lib/api'
 
 const typeOptions = [
   { value: 'all', label: 'All Types' },
@@ -195,13 +119,33 @@ export function DocumentLibrary() {
   const [uploads, setUploads] = useState<
     Array<{ id: string; filename: string; progress: number; status: 'uploading' | 'indexing' | 'complete' }>
   >([])
-  const [documentsList, setDocumentsList] = useState<any[]>(DEFAULT_DOCS)
+  const [documentsList, setDocumentsList] = useState<any[]>([])
   const [uploadControllers, setUploadControllers] = useState<Record<string, AbortController>>({})
 
-  // api client
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const api = require('../lib/api').default
+  const normalizeDocument = (doc: any) => {
+    const docType = String(doc?.document_type || 'other').replaceAll('_', ' ')
+    const indexStatus = String(doc?.indexing_status || 'pending')
+    const status = indexStatus === 'completed' ? 'Indexed' : indexStatus === 'failed' ? 'Failed' : 'Processing'
+    const bytes = Number(doc?.file_size || 0)
+    const size = bytes <= 0
+      ? '-'
+      : bytes < 1024 * 1024
+        ? `${Math.round(bytes / 1024)} KB`
+        : `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+
+    return {
+      id: String(doc?.id || ''),
+      name: String(doc?.title || doc?.file_path?.split(/[\\/]/).pop() || 'Untitled'),
+      type: docType
+        .split(' ')
+        .map((part: string) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(' '),
+      subject: String(doc?.subject || 'Unspecified'),
+      uploadDate: doc?.uploaded_at || new Date().toISOString(),
+      size,
+      status,
+    }
+  }
 
   useEffect(() => {
     fetchDocuments()
@@ -209,9 +153,9 @@ export function DocumentLibrary() {
 
   const fetchDocuments = async () => {
     try {
-      const res = await api.get('/documents/')
+      const res = await api.get('/documents')
       const docs = res.data?.documents || []
-      setDocumentsList(docs)
+      setDocumentsList(docs.map(normalizeDocument))
     } catch (e) {
       console.error('Failed to fetch documents', e)
     }
@@ -312,7 +256,8 @@ export function DocumentLibrary() {
     const matchesSearch = doc.name
       .toLowerCase()
       .includes(searchTerm.toLowerCase())
-    const matchesType = typeFilter === 'all' || doc.type.toLowerCase().includes(typeFilter)
+      const normalizedType = doc.type.toLowerCase().replaceAll(' ', '_')
+      const matchesType = typeFilter === 'all' || normalizedType.includes(typeFilter)
     const matchesSubject =
       subjectFilter === 'all' || doc.subject.toLowerCase().includes(subjectFilter)
 
@@ -544,7 +489,7 @@ export function DocumentLibrary() {
           <div className="flex items-start justify-between">
             <div>
               <p className="text-sm font-medium text-muted-foreground">Total Documents</p>
-              <p className="text-2xl font-bold text-foreground mt-2">{documents.length}</p>
+              <p className="text-2xl font-bold text-foreground mt-2">{documentsList.length}</p>
             </div>
             <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
               <FileText className="w-5 h-5 text-primary" />
@@ -557,7 +502,7 @@ export function DocumentLibrary() {
             <div>
               <p className="text-sm font-medium text-muted-foreground">Indexed</p>
               <p className="text-2xl font-bold text-foreground mt-2">
-                {documents.filter((d) => d.status === 'Indexed').length}
+                {documentsList.filter((d) => d.status === 'Indexed').length}
               </p>
             </div>
             <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center">
@@ -571,7 +516,7 @@ export function DocumentLibrary() {
             <div>
               <p className="text-sm font-medium text-muted-foreground">Processing</p>
               <p className="text-2xl font-bold text-foreground mt-2">
-                {documents.filter((d) => d.status === 'Processing').length}
+                {documentsList.filter((d) => d.status === 'Processing' || d.status === 'Failed').length}
               </p>
             </div>
             <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center">

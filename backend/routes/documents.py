@@ -5,7 +5,10 @@ import os
 import shutil
 from datetime import datetime
 from typing import Optional, List
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, BackgroundTasks
+from uuid import UUID
+
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, BackgroundTasks, Query
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from models import get_db
@@ -52,7 +55,9 @@ async def process_document_async(document_id, file_path: str, db: Session):
                 "document_id": document_id,
                 "title": document.title,
                 "subject": document.subject,
-                "document_type": document.document_type.value
+                "document_type": document.document_type.value,
+                "uploader_id": str(document.uploader_id),
+                "source_type": "document",
             }
         )
         
@@ -185,15 +190,20 @@ async def get_documents(
 
 @router.get("/{document_id}", response_model=DocumentResponse)
 async def get_document(
-    document_id: int,
+    document_id: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user)
 ):
     """
     Get document by ID
     """
+    try:
+        target_id = UUID(document_id)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid document id")
+
     document = db.query(Document).filter(
-        Document.id == document_id,
+        Document.id == target_id,
         Document.is_deleted == False
     ).first()
     
@@ -201,6 +211,42 @@ async def get_document(
         raise HTTPException(status_code=404, detail="Document not found")
     
     return document.to_dict()
+
+
+@router.get("/{document_id}/download")
+async def download_document(
+    document_id: str,
+    inline: bool = Query(False),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    """Download or view a document file."""
+    try:
+        target_id = UUID(document_id)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid document id")
+
+    document = db.query(Document).filter(
+        Document.id == target_id,
+        Document.is_deleted == False,
+    ).first()
+
+    if not document:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    if not document.file_path or not os.path.exists(document.file_path):
+        raise HTTPException(status_code=404, detail="Document file not found")
+
+    media_type = "application/octet-stream"
+    disposition = "inline" if inline else "attachment"
+    download_name = os.path.basename(document.file_path)
+
+    return FileResponse(
+        path=document.file_path,
+        media_type=media_type,
+        filename=download_name,
+        headers={"Content-Disposition": f'{disposition}; filename="{download_name}"'},
+    )
 
 @router.delete("/{document_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_document(

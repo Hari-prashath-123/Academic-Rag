@@ -32,6 +32,10 @@ class LocalDeterministicEmbeddings:
     def embed_query(self, text: str) -> List[float]:
         return self._embed_text(text)
 
+    def __call__(self, text: str) -> List[float]:
+        # Some vector-store paths call embedding function directly.
+        return self.embed_query(text)
+
 class EmbeddingService:
     """Service for generating embeddings and managing vector store"""
     

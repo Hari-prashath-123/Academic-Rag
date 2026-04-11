@@ -1,13 +1,8 @@
 from django.contrib import admin
-from django.http import HttpResponseRedirect
 from django.urls import path
 
 
-def root_redirect(_request):
-    return HttpResponseRedirect("/admin/")
-
-
 urlpatterns = [
-    path("", root_redirect),
+    # Mounted via FastAPI root: expose Django admin at /admin/.
     path("admin/", admin.site.urls),
 ]

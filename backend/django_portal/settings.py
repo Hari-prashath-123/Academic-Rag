@@ -89,7 +89,8 @@ TIME_ZONE = os.getenv("TIME_ZONE", "UTC")
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = "static/"
+# Mounted admin is served under /admin, so static assets must use this prefix.
+STATIC_URL = "/admin/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles_django_admin"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

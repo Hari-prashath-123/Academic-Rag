@@ -3,7 +3,8 @@
 import React, { createContext, useState, useEffect, useContext, useCallback, useMemo } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import axios from 'axios'
-import api from '../lib/api'
+import { getMe, loginWithCredentials } from '../lib/auth-service'
+import { clearAuthTokens, getAccessToken } from '../lib/auth-storage'
 
 export type AuthRole = 'admin' | 'faculty' | 'student' | 'advisor'
 
@@ -94,19 +95,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const router = useRouter()
   const pathname = usePathname()
 
-  // Check if we're on an auth page (login, signup, etc.)
-  const isAuthPage = (pathname) => {
-    const authPaths = ['/auth/login', '/auth/signup']
-    return authPaths.some(path => pathname?.startsWith(path))
-  }
+  const isAuthPage = pathname?.startsWith('/auth/') ?? false
 
   const clearStoredToken = () => {
-    if (typeof window === 'undefined') {
-      return
-    }
-
-    localStorage.removeItem('token')
-    document.cookie = 'token=; Path=/; Max-Age=0; SameSite=Strict'
+    clearAuthTokens()
   }
 
   const setRoleFromToken = (token: string) => {
@@ -118,8 +110,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const refreshUser = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await api.get('/api/auth/me')
-      const profile = res.data as AuthUser
+      const profile = await getMe()
       setUser(profile)
       setRole(resolveRole(profile.roles))
     } catch (error: unknown) {
@@ -136,30 +127,53 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [])
 
-  // Only refresh user on mount, and skip if on auth pages
+  // Initialize auth state once and avoid refetching on every route change.
   useEffect(() => {
-    if (!isAuthPage(pathname)) {
-      refreshUser()
-    } else {
-      setLoading(false)
+    const initializeAuth = async () => {
+      if (typeof window === 'undefined') {
+        setLoading(false)
+        return
+      }
+
+      const token = getAccessToken()
+
+      if (!token) {
+        setUser(null)
+        setRole(null)
+        setLoading(false)
+        return
+      }
+
+      const payload = parseJwtPayload(token)
+      const tokenRoles = Array.isArray(payload?.roles) ? payload.roles : []
+      setRole(resolveRole(tokenRoles))
+      setUser({
+        id: (payload?.sub as string) || '',
+        email: (payload?.email as string) || '',
+        profile: {},
+        roles: tokenRoles,
+        permissions: [],
+      })
+
+      if (!isAuthPage) {
+        await refreshUser()
+      } else {
+        setLoading(false)
+      }
     }
-  }, [pathname, refreshUser])
+
+    initializeAuth()
+  }, [isAuthPage, refreshUser])
 
   const login = async ({ email, password }: LoginPayload): Promise<AuthRole | null> => {
-    const response = await api.post('/api/auth/login', { email, password })
-    const token = response?.data?.access_token
+    const tokenResponse = await loginWithCredentials(email, password)
+    const token = tokenResponse?.access_token
     if (!token) {
       throw new Error('Login token not returned by API')
     }
 
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('token', token)
-      const secureFlag = window.location.protocol === 'https:' ? '; Secure' : ''
-      document.cookie = `token=${token}; Path=/; SameSite=Strict${secureFlag}`
-    }
-
     const tokenRole = resolveRole(
-      Array.isArray(response?.data?.roles) ? response.data.roles : parseJwtPayload(token)?.roles
+      Array.isArray(parseJwtPayload(token)?.roles) ? parseJwtPayload(token)?.roles : []
     )
     const payload = parseJwtPayload(token)
 
@@ -175,9 +189,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Best-effort profile hydration from backend.
     try {
-      await refreshUser()
+      const profile = await getMe()
+      setUser(profile)
+      setRole(resolveRole(profile.roles))
+      setLoading(false)
     } catch {
       // refreshUser already handles auth-clear rules.
+      await refreshUser()
     }
 
     return tokenRole

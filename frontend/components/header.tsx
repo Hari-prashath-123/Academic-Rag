@@ -4,15 +4,45 @@ import { Search, Moon, Sun, Bell } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Badge } from '@/components/ui/badge'
 import { useState, useEffect } from 'react'
+import api from '@/lib/api'
+
+type TokenUsage = {
+  daily_limit: number
+  daily_used: number
+  remaining_tokens: number
+}
 
 export function Header() {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const [usage, setUsage] = useState<TokenUsage | null>(null)
 
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  useEffect(() => {
+    const loadUsage = async () => {
+      try {
+        const response = await api.get('/rag/chat/token-usage')
+        if (response.data) {
+          setUsage({
+            daily_limit: Number(response.data.daily_limit || 0),
+            daily_used: Number(response.data.daily_used || 0),
+            remaining_tokens: Number(response.data.remaining_tokens || 0),
+          })
+        }
+      } catch {
+        setUsage(null)
+      }
+    }
+
+    if (mounted) {
+      loadUsage()
+    }
+  }, [mounted])
 
   if (!mounted) return null
 
@@ -33,6 +63,16 @@ export function Header() {
 
         {/* Right Actions */}
         <div className="flex items-center gap-2 sm:gap-3 ml-auto">
+          {usage && (
+            <Badge
+              variant="outline"
+              className={usage.remaining_tokens <= 0 ? 'text-destructive border-destructive/40' : ''}
+              title={`Used ${usage.daily_used} of ${usage.daily_limit} today`}
+            >
+              Tokens: {usage.remaining_tokens}
+            </Badge>
+          )}
+
           {/* Notifications */}
           <Button
             variant="ghost"

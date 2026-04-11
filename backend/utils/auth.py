@@ -70,23 +70,59 @@ def get_user_roles_and_permissions(user: User) -> tuple[list[str], list[str]]:
     return roles, permissions
 
 
-def create_access_token(data: Dict, expires_delta: Optional[timedelta] = None) -> str:
-    """Create a JWT access token."""
+def _create_token(
+    data: Dict,
+    token_type: str,
+    expires_delta: Optional[timedelta],
+    default_expires_delta: timedelta,
+) -> str:
+    """Create a JWT token with explicit token type."""
     to_encode = data.copy()
 
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        expire = datetime.utcnow() + default_expires_delta
 
-    to_encode.update({"exp": expire})
+    to_encode.update({"exp": expire, "token_type": token_type})
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 
-def decode_access_token(token: str) -> Dict:
-    """Decode and verify a JWT access token."""
+def create_access_token(data: Dict, expires_delta: Optional[timedelta] = None) -> str:
+    """Create a JWT access token."""
+    return _create_token(
+        data=data,
+        token_type="access",
+        expires_delta=expires_delta,
+        default_expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
+    )
+
+
+def create_refresh_token(data: Dict, expires_delta: Optional[timedelta] = None) -> str:
+    """Create a JWT refresh token."""
+    return _create_token(
+        data=data,
+        token_type="refresh",
+        expires_delta=expires_delta,
+        default_expires_delta=timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS),
+    )
+
+
+def decode_access_token(token: str, expected_token_type: Optional[str] = "access") -> Dict:
+    """Decode and verify a JWT token, optionally enforcing token_type."""
     try:
-        return jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+
+        token_type = payload.get("token_type")
+        # Backward compatibility: older tokens may omit token_type.
+        if expected_token_type and token_type and token_type != expected_token_type:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=f"Invalid token type: expected {expected_token_type}",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
+        return payload
     except JWTError as exc:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

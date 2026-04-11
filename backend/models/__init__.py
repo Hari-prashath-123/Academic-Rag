@@ -45,5 +45,6 @@ from .query import Query  # noqa: E402, F401
 from .mark import AssessmentType, Mark  # noqa: E402, F401
 from .note import Note  # noqa: E402, F401
 from .chat import ChatHistory, MessageRole  # noqa: E402, F401
+from .token_limit import UserDailyTokenUsage, UserTokenLimit  # noqa: E402, F401
 from .advisor_mapping import AdvisorStudentMapping  # noqa: E402, F401
 from .course_material import Course, CourseMaterial, MaterialType  # noqa: E402, F401
